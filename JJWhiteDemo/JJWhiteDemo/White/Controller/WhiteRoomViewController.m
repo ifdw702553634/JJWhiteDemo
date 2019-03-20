@@ -21,11 +21,6 @@
 #import "KeyCenter.h"
 #import <MBProgressHUD.h>
 
-//chat
-#import "MsgTableView.h"
-#import "Message.h"
-#import "UIColor+Extension.h"
-#import "AgoraSignal.h"
 
 @interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate,WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate,AgoraRtcEngineDelegate,UITextFieldDelegate>
 @property (nonatomic, strong) WhiteSDK *sdk;
@@ -53,8 +48,6 @@
 @property (strong, nonatomic) VideoSession *fullSession;
 
 //信令
-@property (strong, nonatomic) MsgTableView *msgTableView;
-@property (nonatomic, assign) NSInteger userNum;
 @property (nonatomic, strong) UITextField *txtField;
 
 @end
@@ -94,9 +87,6 @@ static NSInteger streamID = 0;
     
     [self loadAgoraKit];
     
-    //信令chat相关
-    [[AgoraSignal sharedKit] channelQueryUserNum:self.roomName];
-    self.messageList.identifier = self.roomName;
     // Do any additional setup after loading the view.
 }
 
@@ -107,7 +97,6 @@ static NSInteger streamID = 0;
     NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
     [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
     
-    [self addAgoraSignalBlock];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -116,26 +105,8 @@ static NSInteger streamID = 0;
     ((AppDelegate *)[UIApplication sharedApplication].delegate).allowRotation = NO;
     NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
     [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
-    
-    [[AgoraSignal sharedKit] channelLeave:self.roomName];
-    [[AgoraSignal sharedKit] logout];
 }
 
-//userNum
-- (void)setUserNum:(NSInteger)userNum {
-    _userNum = userNum;
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        strongSelf.title = [NSString stringWithFormat:@"%@ (%lu)", self.roomName, userNum];
-    });
-}
-- (MessageList *)messageList {
-    if (!_messageList) {
-        _messageList = [[MessageList alloc] init];
-    }
-    return _messageList;
-}
 
 
 
@@ -167,15 +138,6 @@ static NSInteger streamID = 0;
         make.left.equalTo(self.boardView.mas_right).offset(0);
     }];
     
-    //用于显示消息
-    self.msgTableView = [[MsgTableView alloc] init];
-    [self.boardView addSubview:_msgTableView];
-    [_msgTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.boardView).offset(20);
-        make.left.equalTo(self.boardView).offset(20);
-        make.width.offset(100);
-        make.height.offset(150);
-    }];
     
     __weak WhiteRoomViewController *weakSelf = self;
     self.toolSelectView = [[NSBundle mainBundle] loadNibNamed:@"ToolSelectView" owner:nil options:nil][0];
@@ -602,7 +564,6 @@ static NSInteger streamID = 0;
 #pragma mark - textField Delegate
 - (void)sendDataWithString:(NSString *)message {
 //    [self.msgTableView appendMsgToTableViewWithMsg:message msgType:MsgTypeChat];
-    [[AgoraSignal sharedKit] messageChannelSend:self.roomName msg:message msgID:[NSString stringWithFormat:@"%lu", (unsigned long)self.messageList.list.count]];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -851,67 +812,6 @@ static NSInteger streamID = 0;
 
 - (void)doHandPressed:(UIButton *)sender {
     NSLog(@"hand click");
-}
-
-#pragma mark - 信令 chat
-- (void)addAgoraSignalBlock {
-    __weak typeof(self) weakSelf = self;
-    [AgoraSignal sharedKit].onMessageSendError = ^(NSString *messageID, AgoraEcode ecode) {
-        [weakSelf alertString:[NSString stringWithFormat:@"Message send failed with error: %lu", ecode]];
-    };
-    [AgoraSignal sharedKit].onMessageChannelReceive = ^(NSString *channelID, NSString *account, uint32_t uid, NSString *msg) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            Message *message = [[Message alloc] initWithAccount:account message:msg];
-            [strongSelf.messageList.list addObject:message];
-            [strongSelf updateTableView:strongSelf.msgTableView withMessage:message];
-            strongSelf.txtField.text = @"";
-        });
-    };
-    
-    [AgoraSignal sharedKit].onChannelQueryUserNumResult = ^(NSString *channelID, AgoraEcode ecode, int num) {
-        weakSelf.userNum = num;
-    };
-    
-    [AgoraSignal sharedKit].onChannelUserJoined = ^(NSString *account, uint32_t uid) {
-        weakSelf.userNum ++;
-    };
-    
-    [AgoraSignal sharedKit].onChannelUserLeaved = ^(NSString *account, uint32_t uid) {
-        weakSelf.userNum --;
-    };
-    
-    //点对点收到消息回调
-    [AgoraSignal sharedKit].onMessageInstantReceive = ^(NSString *account, uint32_t uid, NSString *msg) {
-        NSLog(@"%@", msg);
-        if ([msg isEqualToString:@"mute_off"]) {
-            weakSelf.isAudio = NO;
-        }else if ([msg isEqualToString:@"mute_on"]) {
-            weakSelf.isAudio = YES;
-        }else if ([msg isEqualToString:@"cacnel"]) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                __strong typeof(weakSelf) strongSelf = weakSelf;
-                strongSelf.clientRole = AgoraClientRoleAudience;
-                //禁用手势
-                [strongSelf.room disableOperations:YES];
-                //重新设置为跟随模式
-                [strongSelf.room setViewMode:WhiteViewModeFollower];
-                if (strongSelf.fullSession.uid == 0) {
-                    strongSelf.fullSession = nil;
-                }
-                [strongSelf.rtcEngine setClientRole:weakSelf.clientRole];
-                [strongSelf updateInterfaceWithAnimation:YES];
-            });
-        }else if ([msg isEqualToString:@"video_off"]) {
-            weakSelf.isVideo = NO;
-        }else if ([msg isEqualToString:@"video_on"]) {
-            weakSelf.isVideo = YES;
-        }
-    };
-}
-
-- (void)updateTableView:(UITableView *)tableView withMessage:(Message *)message {
-    [self.msgTableView appendMsgToTableViewWithMsg:message msgType:MsgTypeChat];
 }
 
 

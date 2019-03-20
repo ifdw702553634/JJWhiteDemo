@@ -11,7 +11,7 @@
 #import "WhiteBaseViewController.h"
 
 
-@class WhiteRoomViewController,MessageList;
+@class WhiteRoomViewController;
 @protocol LiveRoomDelegate <NSObject>
 - (void)liveVCNeedClose:(WhiteRoomViewController *)liveVC;
 @end
@@ -36,7 +36,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - chat
 @property (copy, nonatomic) NSString *roomName;
-@property (nonatomic, strong) MessageList *messageList;
 
 @end
 

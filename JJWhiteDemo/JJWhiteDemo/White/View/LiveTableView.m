@@ -9,7 +9,6 @@
 #import "LiveTableView.h"
 #import "LiveTableViewCell.h"
 #import "VideoViewLayouter.h"
-#import "AgoraSignal.h"
 
 static NSString *kLiveTableViewCell = @"LiveTableViewCell";
 @interface LiveTableView()<UITableViewDelegate,UITableViewDataSource>

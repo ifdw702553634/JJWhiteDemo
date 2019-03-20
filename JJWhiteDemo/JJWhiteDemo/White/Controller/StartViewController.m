@@ -11,9 +11,6 @@
 #import "WhiteSettingViewController.h"
 #import "WhitePlayerViewController.h"
 
-//chat
-#import "AgoraSignal.h"
-
 #import "HandlerBusiness.h"
 #import <MBProgressHUD.h>
 
@@ -78,7 +75,15 @@
         }else {
             self.clientRole = AgoraClientRoleAudience;
         }
-        [[AgoraSignal sharedKit] channelJoin:data[@"room_name"]];
+        WhiteRoomViewController *vc = [[WhiteRoomViewController alloc] init];
+        vc.roomUuid = self.dataDic[@"white_room_uuid"];
+        vc.clientRole = self.clientRole;
+        vc.roomName = self.dataDic[@"room_name"];
+        vc.roomToken = self.dataDic[@"white_room_token"];
+        vc.videoProfile = self.videoProfile;
+        vc.delegate = self;
+        [self.navigationController pushViewController:vc animated:YES];
+
     } Failed:^(NSString *error, NSString *errorDescription) {
         NSLog(@"Api Failed");
     } Complete:^{
@@ -88,28 +93,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self addAgoraSignalBlock];
 }
 
-- (void)addAgoraSignalBlock {
-    __weak typeof(self) weakSelf = self;
-    [AgoraSignal sharedKit].onChannelJoined = ^(NSString *channelID) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            WhiteRoomViewController *vc = [[WhiteRoomViewController alloc] init];
-            vc.roomUuid = strongSelf.dataDic[@"white_room_uuid"];
-            vc.clientRole = self.clientRole;
-            vc.roomName = strongSelf.dataDic[@"room_name"];
-            vc.roomToken = strongSelf.dataDic[@"white_room_token"];
-            vc.videoProfile = strongSelf.videoProfile;
-            vc.delegate = strongSelf;
-            [strongSelf.navigationController pushViewController:vc animated:YES];
-        });
-    };
-    [AgoraSignal sharedKit].onChannelJoinFailed = ^(NSString *channelID, AgoraEcode ecode) {
-        [weakSelf alertString:[NSString stringWithFormat:@"Join channel failed with error: %lu", ecode]];
-    };
-}
 
 - (BOOL)checkString:(NSString *)string {
     if (!string.length) {

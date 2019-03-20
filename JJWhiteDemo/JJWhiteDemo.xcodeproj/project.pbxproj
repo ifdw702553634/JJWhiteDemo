@@ -10,11 +10,6 @@
 		25AC91C64F91001D176D14F4 /* libPods-JJWhiteDemoUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 093D3B89F404E8B2FE5D1B83 /* libPods-JJWhiteDemoUITests.a */; };
 		3C41309BA12143DC852C9442 /* libPods-JJWhiteDemoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F28F4AF5B5E4FB0B3E48A45 /* libPods-JJWhiteDemoTests.a */; };
 		8C0A4F5D6EBF7A26E36B9057 /* libPods-JJWhiteDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F42EB010A9C32ED40ED5CBD2 /* libPods-JJWhiteDemo.a */; };
-		C32DFFCB223B92740039F81E /* MsgTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C32DFFC6223B92740039F81E /* MsgTableView.m */; };
-		C32DFFCC223B92740039F81E /* MsgCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C32DFFC7223B92740039F81E /* MsgCell.xib */; };
-		C32DFFCD223B92740039F81E /* MsgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C32DFFCA223B92740039F81E /* MsgCell.m */; };
-		C32DFFD0223B92D50039F81E /* MessageType.m in Sources */ = {isa = PBXBuildFile; fileRef = C32DFFCE223B92D50039F81E /* MessageType.m */; };
-		C32DFFD3223B93010039F81E /* MsgModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C32DFFD2223B93010039F81E /* MsgModel.m */; };
 		C348000622421AA400CEFA26 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000522421AA400CEFA26 /* SystemConfiguration.framework */; };
 		C348000822421AB100CEFA26 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000722421AB100CEFA26 /* CoreTelephony.framework */; };
 		C348000A22421ABD00CEFA26 /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000922421ABD00CEFA26 /* libresolv.9.tbd */; };
@@ -32,12 +27,7 @@
 		C3689BC22237B5000069DC5B /* ColorTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3689BC12237B5000069DC5B /* ColorTableViewController.m */; };
 		C3689BC62237B5710069DC5B /* ColorTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3689BC42237B5710069DC5B /* ColorTableViewCell.m */; };
 		C3689BC72237B5710069DC5B /* ColorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3689BC52237B5710069DC5B /* ColorTableViewCell.xib */; };
-		C36FA7A0223F2FFE00911170 /* AgoraSigKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C36FA79F223F2FFE00911170 /* AgoraSigKit.framework */; };
 		C36FA7A2223F301200911170 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C36FA7A1223F301200911170 /* libc++.tbd */; };
-		C36FA7A8223F313000911170 /* AgoraSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = C36FA7A4223F313000911170 /* AgoraSignal.m */; };
-		C36FA7A9223F313000911170 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = C36FA7A7223F313000911170 /* Message.m */; };
-		C36FA7AF223F315F00911170 /* UIColor+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C36FA7AD223F315F00911170 /* UIColor+Extension.m */; };
-		C36FA7B0223F315F00911170 /* LogWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = C36FA7AE223F315F00911170 /* LogWriter.m */; };
 		C3B83E3B223B3A28003E9443 /* LiveTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C3B83E3A223B3A28003E9443 /* LiveTableView.m */; };
 		C3B83E3D223B3A36003E9443 /* LiveTableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3B83E3C223B3A36003E9443 /* LiveTableView.xib */; };
 		C3B83E41223B3B23003E9443 /* LiveTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3B83E3F223B3B23003E9443 /* LiveTableViewCell.m */; };
@@ -88,15 +78,6 @@
 		822803F532748D6180683BF0 /* Pods-JJWhiteDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoUITests/Pods-JJWhiteDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
 		918443AE096E7072250B40D9 /* Pods-JJWhiteDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoTests/Pods-JJWhiteDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		924E37B431D0FB17D35ABCF2 /* Pods-JJWhiteDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoUITests/Pods-JJWhiteDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		C32DFFC6223B92740039F81E /* MsgTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MsgTableView.m; sourceTree = "<group>"; };
-		C32DFFC7223B92740039F81E /* MsgCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MsgCell.xib; sourceTree = "<group>"; };
-		C32DFFC8223B92740039F81E /* MsgTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MsgTableView.h; sourceTree = "<group>"; };
-		C32DFFC9223B92740039F81E /* MsgCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MsgCell.h; sourceTree = "<group>"; };
-		C32DFFCA223B92740039F81E /* MsgCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MsgCell.m; sourceTree = "<group>"; };
-		C32DFFCE223B92D50039F81E /* MessageType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageType.m; sourceTree = "<group>"; };
-		C32DFFCF223B92D50039F81E /* MessageType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageType.h; sourceTree = "<group>"; };
-		C32DFFD1223B93000039F81E /* MsgModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MsgModel.h; sourceTree = "<group>"; };
-		C32DFFD2223B93010039F81E /* MsgModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MsgModel.m; sourceTree = "<group>"; };
 		C348000322421A9700CEFA26 /* AgoraRtmKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraRtmKit.framework; path = JJWhiteDemo/libs/AgoraRtmKit.framework; sourceTree = "<group>"; };
 		C348000522421AA400CEFA26 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C348000722421AB100CEFA26 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -125,16 +106,7 @@
 		C3689BC32237B5710069DC5B /* ColorTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorTableViewCell.h; sourceTree = "<group>"; };
 		C3689BC42237B5710069DC5B /* ColorTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColorTableViewCell.m; sourceTree = "<group>"; };
 		C3689BC52237B5710069DC5B /* ColorTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColorTableViewCell.xib; sourceTree = "<group>"; };
-		C36FA79F223F2FFE00911170 /* AgoraSigKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AgoraSigKit.framework; sourceTree = "<group>"; };
 		C36FA7A1223F301200911170 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		C36FA7A4223F313000911170 /* AgoraSignal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraSignal.m; sourceTree = "<group>"; };
-		C36FA7A5223F313000911170 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
-		C36FA7A6223F313000911170 /* AgoraSignal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraSignal.h; sourceTree = "<group>"; };
-		C36FA7A7223F313000911170 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		C36FA7AB223F315F00911170 /* UIColor+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Extension.h"; sourceTree = "<group>"; };
-		C36FA7AC223F315F00911170 /* LogWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogWriter.h; sourceTree = "<group>"; };
-		C36FA7AD223F315F00911170 /* UIColor+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Extension.m"; sourceTree = "<group>"; };
-		C36FA7AE223F315F00911170 /* LogWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogWriter.m; sourceTree = "<group>"; };
 		C3B83E39223B3A28003E9443 /* LiveTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveTableView.h; sourceTree = "<group>"; };
 		C3B83E3A223B3A28003E9443 /* LiveTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveTableView.m; sourceTree = "<group>"; };
 		C3B83E3C223B3A36003E9443 /* LiveTableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LiveTableView.xib; sourceTree = "<group>"; };
@@ -188,7 +160,6 @@
 				C348000822421AB100CEFA26 /* CoreTelephony.framework in Frameworks */,
 				C348000622421AA400CEFA26 /* SystemConfiguration.framework in Frameworks */,
 				C36FA7A2223F301200911170 /* libc++.tbd in Frameworks */,
-				C36FA7A0223F2FFE00911170 /* AgoraSigKit.framework in Frameworks */,
 				C348000C22421ACC00CEFA26 /* AgoraRtmKit.framework in Frameworks */,
 				8C0A4F5D6EBF7A26E36B9057 /* libPods-JJWhiteDemo.a in Frameworks */,
 			);
@@ -264,24 +235,9 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		C36FA7A3223F313000911170 /* chat */ = {
-			isa = PBXGroup;
-			children = (
-				C36FA7A4223F313000911170 /* AgoraSignal.m */,
-				C36FA7A6223F313000911170 /* AgoraSignal.h */,
-				C36FA7A5223F313000911170 /* Message.h */,
-				C36FA7A7223F313000911170 /* Message.m */,
-			);
-			path = chat;
-			sourceTree = "<group>";
-		};
 		C36FA7AA223F315F00911170 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				C36FA7AB223F315F00911170 /* UIColor+Extension.h */,
-				C36FA7AD223F315F00911170 /* UIColor+Extension.m */,
-				C36FA7AC223F315F00911170 /* LogWriter.h */,
-				C36FA7AE223F315F00911170 /* LogWriter.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -348,7 +304,6 @@
 			isa = PBXGroup;
 			children = (
 				C348000B22421ACC00CEFA26 /* AgoraRtmKit.framework */,
-				C36FA79F223F2FFE00911170 /* AgoraSigKit.framework */,
 			);
 			path = libs;
 			sourceTree = "<group>";
@@ -377,11 +332,6 @@
 				C3B83E3E223B3B23003E9443 /* LiveTableViewCell.h */,
 				C3B83E3F223B3B23003E9443 /* LiveTableViewCell.m */,
 				C3B83E40223B3B23003E9443 /* LiveTableViewCell.xib */,
-				C32DFFC9223B92740039F81E /* MsgCell.h */,
-				C32DFFCA223B92740039F81E /* MsgCell.m */,
-				C32DFFC7223B92740039F81E /* MsgCell.xib */,
-				C32DFFC8223B92740039F81E /* MsgTableView.h */,
-				C32DFFC6223B92740039F81E /* MsgTableView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -411,11 +361,6 @@
 		C3DCB8D1223757AE00DF4B3C /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				C36FA7A3223F313000911170 /* chat */,
-				C32DFFD1223B93000039F81E /* MsgModel.h */,
-				C32DFFD2223B93010039F81E /* MsgModel.m */,
-				C32DFFCF223B92D50039F81E /* MessageType.h */,
-				C32DFFCE223B92D50039F81E /* MessageType.m */,
 				C3DCB8D4223757BD00DF4B3C /* KeyCenter.h */,
 				C3DCB8D2223757BD00DF4B3C /* KeyCenter.m */,
 				C3DCB8D5223757BE00DF4B3C /* VideoSession.h */,
@@ -543,7 +488,6 @@
 				C3689BB72237A8130069DC5B /* ToolSelectView.xib in Resources */,
 				C3689BC72237B5710069DC5B /* ColorTableViewCell.xib in Resources */,
 				C3DCB8CB22374E8B00DF4B3C /* WhiteSettingTableViewCell.xib in Resources */,
-				C32DFFCC223B92740039F81E /* MsgCell.xib in Resources */,
 				C3DCB8D02237532E00DF4B3C /* LiveRoomView.xib in Resources */,
 				C3DCB8C422374D5C00DF4B3C /* WhiteSettingViewController.xib in Resources */,
 				C3B83E3D223B3A36003E9443 /* LiveTableView.xib in Resources */,
@@ -665,16 +609,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C32DFFD3223B93010039F81E /* MsgModel.m in Sources */,
 				C3689BAC22379B330069DC5B /* WhitePlayerViewController.m in Sources */,
 				C34800152242244400CEFA26 /* HandlerBusiness.m in Sources */,
 				C3B83E41223B3B23003E9443 /* LiveTableViewCell.m in Sources */,
-				C36FA7AF223F315F00911170 /* UIColor+Extension.m in Sources */,
 				C3B8FE83223217A20050312F /* ViewController.m in Sources */,
 				C3DCB8CE2237532000DF4B3C /* LiveRoomView.m in Sources */,
 				C3689BAF22379B510069DC5B /* WhiteBaseViewController.m in Sources */,
 				C3689BB52237A8060069DC5B /* ToolSelectView.m in Sources */,
-				C36FA7B0223F315F00911170 /* LogWriter.m in Sources */,
 				C3DCB8CA22374E8B00DF4B3C /* WhiteSettingTableViewCell.m in Sources */,
 				C3DCB8C322374D5C00DF4B3C /* WhiteSettingViewController.m in Sources */,
 				C3689BBE2237A8750069DC5B /* ToolSelectTableViewCell.m in Sources */,
@@ -684,17 +625,12 @@
 				C3689BB222379E830069DC5B /* WhiteUtils.m in Sources */,
 				C3B8FE80223217A20050312F /* AppDelegate.m in Sources */,
 				C3689BC62237B5710069DC5B /* ColorTableViewCell.m in Sources */,
-				C36FA7A9223F313000911170 /* Message.m in Sources */,
-				C32DFFD0223B92D50039F81E /* MessageType.m in Sources */,
 				C34800162242244400CEFA26 /* BaseHandlerBusiness.m in Sources */,
 				C3B8FEB82232188B0050312F /* StartViewController.m in Sources */,
-				C32DFFCD223B92740039F81E /* MsgCell.m in Sources */,
 				C34800142242244400CEFA26 /* JJApiClient.m in Sources */,
 				C3DCB8D9223757BE00DF4B3C /* VideoViewLayouter.m in Sources */,
 				C3B8FEB72232188B0050312F /* CommandListController.m in Sources */,
 				C3DCB8D8223757BE00DF4B3C /* KeyCenter.m in Sources */,
-				C36FA7A8223F313000911170 /* AgoraSignal.m in Sources */,
-				C32DFFCB223B92740039F81E /* MsgTableView.m in Sources */,
 				C3B8FEB62232188B0050312F /* WhiteRoomViewController.m in Sources */,
 				C3689BC22237B5000069DC5B /* ColorTableViewController.m in Sources */,
 			);

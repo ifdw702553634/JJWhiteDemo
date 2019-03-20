@@ -9,13 +9,7 @@
 #import "ViewController.h"
 #import "StartViewController.h"
 #import <Masonry/Masonry.h>
-#import "AgoraSignal.h"
-#import "LogWriter.h"
-#import "Message.h"
 #import "KeyCenter.h"
-#import "UIColor+Extension.h"
-
-
 
 @interface ViewController ()
 
@@ -65,7 +59,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self addAgoraSignalBlock];
 }
 
 - (void)dismissKeybroader:(id)sender
@@ -89,54 +82,15 @@
         }else {
             uid = @"1";
         }
-        [[AgoraSignal sharedKit] login2:[KeyCenter AppId] account:uid token:@"_no_need_token" uid:0 deviceID:nil retry_time_in_s:60 retry_count:5];
         NSString *lastAccount = [[NSUserDefaults standardUserDefaults] stringForKey:@"uid"];
         if (![uid isEqualToString:lastAccount]) {
             [[NSUserDefaults standardUserDefaults] setValue:uid forKey:@"uid"];
-            [[MessageCenter sharedCenter].chatMessages removeAllObjects];
         }
-        
-        if ([[MessageCenter sharedCenter] userColor][uid] == nil) {
-            [[MessageCenter sharedCenter] userColor][uid] = [UIColor randomColor];
-        }
+        StartViewController *vc = [[StartViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
-- (void)addAgoraSignalBlock {
-    __weak typeof(self) weakSelf = self;
-    [AgoraSignal sharedKit].onLoginSuccess = ^(uint32_t uid, int fd) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            StartViewController *vc = [[StartViewController alloc] init];
-            [strongSelf.navigationController pushViewController:vc animated:YES];
-        });
-    };
-    
-    [AgoraSignal sharedKit].onLoginFailed = ^(AgoraEcode ecode) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf alertString:[NSString stringWithFormat:@"Login failed with error: %lu", ecode]];
-    };
-    
-    [AgoraSignal sharedKit].onLog = ^(NSString *txt) {
-        if (!txt.length) {
-            return;
-        }
-        
-        [LogWriter writeLog:txt];
-    };
-    
-    [AgoraSignal sharedKit].onMessageInstantReceive = ^(NSString *account, uint32_t uid, NSString *msg) {
-        NSMutableDictionary *chatMessages = [MessageCenter sharedCenter].chatMessages;
-        Message *message = [[Message alloc] initWithAccount:account message:msg];
-        
-        MessageList *messageList = chatMessages[account];
-        if (!messageList) {
-            chatMessages[account] = [[MessageList alloc] initWithIdentifier:account message:message];
-        }
-        
-        [messageList.list addObject:message];
-    };
-}
 
 - (BOOL)checkString:(NSString *)string {
     if (!string.length) {
