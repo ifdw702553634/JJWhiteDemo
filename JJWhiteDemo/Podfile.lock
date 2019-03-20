@@ -1,0 +1,36 @@
+PODS:
+  - AgoraRtcEngine_iOS (2.3.3)
+  - dsBridge (3.0.6)
+  - Masonry (1.1.0)
+  - MBProgressHUD (1.1.0)
+  - White-SDK-iOS (2.0.0):
+    - dsBridge (~> 3.0.2)
+    - YYModel (~> 1.0.4)
+  - YYModel (1.0.4)
+
+DEPENDENCIES:
+  - AgoraRtcEngine_iOS
+  - Masonry
+  - MBProgressHUD
+  - White-SDK-iOS
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AgoraRtcEngine_iOS
+    - dsBridge
+    - Masonry
+    - MBProgressHUD
+    - White-SDK-iOS
+    - YYModel
+
+SPEC CHECKSUMS:
+  AgoraRtcEngine_iOS: 8ad4b58dafed2cec5df03fa1f0ddbdad2c9ff958
+  dsBridge: 48b62ee8a411ad601a88d6f6c8cf6cb634b206b7
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  White-SDK-iOS: 5d316c56d8d0e96231c34d93d301816efafd9a47
+  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
+
+PODFILE CHECKSUM: 60a1db031ccdfbb09f8164b32cf2e6c307abd794
+
+COCOAPODS: 1.5.3

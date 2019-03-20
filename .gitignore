@@ -1,0 +1,7 @@
+*.xcscheme
+Pods
+contents.xcworkspacedata
+Breakpoints_v2.xcbkptlist
+UserInterfaceState.xcuserstate
+xcschememanagement.plist
+!.gitignore
