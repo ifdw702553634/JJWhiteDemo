@@ -1,4 +1,19 @@
 PODS:
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
   - AgoraRtcEngine_iOS (2.3.3)
   - dsBridge (3.0.6)
   - Masonry (1.1.0)
@@ -9,13 +24,16 @@ PODS:
   - YYModel (1.0.4)
 
 DEPENDENCIES:
+  - AFNetworking
   - AgoraRtcEngine_iOS
   - Masonry
   - MBProgressHUD
   - White-SDK-iOS
+  - YYModel
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AFNetworking
     - AgoraRtcEngine_iOS
     - dsBridge
     - Masonry
@@ -24,6 +42,7 @@ SPEC REPOS:
     - YYModel
 
 SPEC CHECKSUMS:
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   AgoraRtcEngine_iOS: 8ad4b58dafed2cec5df03fa1f0ddbdad2c9ff958
   dsBridge: 48b62ee8a411ad601a88d6f6c8cf6cb634b206b7
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
@@ -31,6 +50,6 @@ SPEC CHECKSUMS:
   White-SDK-iOS: 5d316c56d8d0e96231c34d93d301816efafd9a47
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 60a1db031ccdfbb09f8164b32cf2e6c307abd794
+PODFILE CHECKSUM: 0f92626306452ef89184a66aa42a9ce120f9d0fb
 
 COCOAPODS: 1.5.3

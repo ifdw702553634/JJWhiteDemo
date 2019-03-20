@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WhiteRoomViewController : WhiteBaseViewController
 
 @property (nonatomic, strong) WhiteRoom *room;
+@property (nonatomic, copy) NSString *roomToken;
 
 #pragma mark - Unit Testing
 @property (nonatomic, weak) id<WhiteRoomCallbackDelegate> roomCallbackDelegate;

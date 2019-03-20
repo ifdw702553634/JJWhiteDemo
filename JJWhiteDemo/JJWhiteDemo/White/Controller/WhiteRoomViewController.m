@@ -13,7 +13,6 @@
 #import "WhiteUtils.h"
 #import "ToolSelectView.h"
 #import "ColorTableViewController.h"
-#import "MsgTableView.h"
 
 //live
 #import "LiveRoomView.h"
@@ -23,12 +22,12 @@
 #import <MBProgressHUD.h>
 
 //chat
+#import "MsgTableView.h"
 #import "Message.h"
 #import "UIColor+Extension.h"
 #import "AgoraSignal.h"
 
 @interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate,WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate,AgoraRtcEngineDelegate,UITextFieldDelegate>
-@property (nonatomic, copy) NSString *roomToken;
 @property (nonatomic, strong) WhiteSDK *sdk;
 @property (nonatomic, assign, getter=isReconnecting) BOOL reconnecting;
 @property (nonatomic, strong) ToolSelectView *toolSelectView;
@@ -37,20 +36,24 @@
 
 //视频相关
 @property (nonatomic, strong) LiveTableView *liveTableView;
-@property (strong, nonatomic) MsgTableView *msgTableView;
 @property (strong, nonatomic) UIButton *broadcastButton;
 @property (strong, nonatomic) UIButton *audioMuteButton;
 @property (nonatomic, strong) UIButton *switchCameraButton;
 @property (nonatomic, strong) UIButton *videoButton;
+@property (nonatomic, strong) UIButton *handButton;
 
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
-@property (assign, nonatomic) BOOL isBroadcaster;
+@property (assign, nonatomic) BOOL isBroadcaster;//是否主播模式
 @property (assign, nonatomic) BOOL isAudio;//语音是否开启
 @property (assign, nonatomic) BOOL isVideo;//视频是否开启
+
+@property (nonatomic, assign) AgoraClientRole isTeacher;//是否是老师，用于辨别唯一
+
 @property (strong, nonatomic) NSMutableArray<VideoSession *> *videoSessions;
 @property (strong, nonatomic) VideoSession *fullSession;
 
 //信令
+@property (strong, nonatomic) MsgTableView *msgTableView;
 @property (nonatomic, assign) NSInteger userNum;
 @property (nonatomic, strong) UITextField *txtField;
 
@@ -63,6 +66,8 @@ static NSInteger streamID = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.isTeacher = self.clientRole;
     
     NSString *sdkToken = [WhiteUtils sdkToken];
     self.view.backgroundColor = [UIColor colorWithRed:66.f/255.f green:66.f/255.f blue:66.f/255.f alpha:0.5f];
@@ -194,9 +199,13 @@ static NSInteger streamID = 0;
     [_broadcastButton addTarget:self action:@selector(doBroadcastPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.boardView addSubview:_broadcastButton];
     [self.broadcastButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(0);
-        make.left.equalTo(self.boardView).offset(0);
-        make.width.height.offset(44);
+        make.bottom.equalTo(self.view).offset(-2);
+        make.left.equalTo(self.boardView).offset(2);
+        if (self.isTeacher == AgoraClientRoleAudience) {
+            make.width.height.offset(0);//学生隐藏上麦按钮
+        }else {
+            make.width.height.offset(44);
+        }
     }];
     //switchCameraButton
     _switchCameraButton = [[UIButton alloc] init];
@@ -204,8 +213,8 @@ static NSInteger streamID = 0;
     [_switchCameraButton addTarget:self action:@selector(doSwitchCameraPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.boardView addSubview:_switchCameraButton];
     [self.switchCameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(0);
-        make.left.equalTo(self.broadcastButton.mas_right).offset(0);
+        make.bottom.equalTo(self.view).offset(-2);
+        make.left.equalTo(self.broadcastButton.mas_right).offset(2);
         make.width.height.offset(44);
     }];
     
@@ -215,8 +224,8 @@ static NSInteger streamID = 0;
     [_audioMuteButton addTarget:self action:@selector(doMutePressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.boardView addSubview:_audioMuteButton];
     [self.audioMuteButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(0);
-        make.left.equalTo(self.switchCameraButton.mas_right).offset(0);
+        make.bottom.equalTo(self.view).offset(-2);
+        make.left.equalTo(self.switchCameraButton.mas_right).offset(2);
         make.width.height.offset(44);
     }];
     
@@ -226,8 +235,8 @@ static NSInteger streamID = 0;
     [_videoButton addTarget:self action:@selector(doVideoPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.boardView addSubview:_videoButton];
     [self.videoButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(0);
-        make.left.equalTo(self.audioMuteButton.mas_right).offset(0);
+        make.bottom.equalTo(self.view).offset(-2);
+        make.left.equalTo(self.audioMuteButton.mas_right).offset(2);
         make.width.height.offset(44);
     }];
     
@@ -237,11 +246,25 @@ static NSInteger streamID = 0;
     _txtField.placeholder = @"发送消息请输入...";
     [self.boardView addSubview:_txtField];
     [_txtField mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(0);
+        make.bottom.equalTo(self.view).offset(-2);
         make.left.equalTo(self.videoButton.mas_right).offset(20);
-        make.right.equalTo(self.boardView).offset(20);
+        make.right.equalTo(self.boardView).offset(50);
         make.width.height.offset(44);
     }];
+    
+    if (_isTeacher == AgoraClientRoleAudience) {
+        //handButton
+        _handButton = [[UIButton alloc] init];
+        [_handButton setImage:[UIImage imageNamed:@"btn_hand"] forState:UIControlStateNormal];
+        [_handButton addTarget:self action:@selector(doHandPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.boardView addSubview:_handButton];
+        [self.handButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.view).offset(-2);
+            make.left.equalTo(self.txtField.mas_right).offset(2);
+            make.right.equalTo(self.boardView).offset(-2);
+            make.width.height.offset(44);
+        }];
+    }
     
     [self.view bringSubviewToFront:_progressHUD];
 }
@@ -295,8 +318,6 @@ static NSInteger streamID = 0;
 
 - (void)cancel {
     [self leaveChannel];
-    
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -386,21 +407,23 @@ static NSInteger streamID = 0;
     }
 //    self.title = NSLocalizedString(@"加入房间中...", nil);
     self.progressHUD.label.text = @"加入房间中...";
-    [WhiteUtils getRoomTokenWithUuid:self.roomUuid Result:^(BOOL success, id response, NSError *error) {
-        if (success) {
-            NSString *roomToken = response[@"msg"][@"roomToken"];
-            [self joinRoomWithToken:roomToken];
-        } else {
-            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"加入房间失败", nil) message:[NSString stringWithFormat:@"服务器信息:%@，系统错误信息:%@", [error localizedDescription], [response description]] preferredStyle:UIAlertControllerStyleAlert];
-            alertVC.popoverPresentationController.sourceView = self.view;
-            alertVC.popoverPresentationController.sourceRect = self.view.bounds;
-            UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
-            }];
-            [alertVC addAction:action];
-            [self presentViewController:alertVC animated:YES completion:nil];
-        }
-    }];
+    [self joinRoomWithToken:self.roomToken];
+    
+//    [WhiteUtils getRoomTokenWithUuid:self.roomUuid Result:^(BOOL success, id response, NSError *error) {
+//        if (success) {
+//            NSString *roomToken = response[@"msg"][@"roomToken"];
+//            [self joinRoomWithToken:roomToken];
+//        } else {
+//            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"加入房间失败", nil) message:[NSString stringWithFormat:@"服务器信息:%@，系统错误信息:%@", [error localizedDescription], [response description]] preferredStyle:UIAlertControllerStyleAlert];
+//            alertVC.popoverPresentationController.sourceView = self.view;
+//            alertVC.popoverPresentationController.sourceRect = self.view.bounds;
+//            UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//                [self.navigationController popViewControllerAnimated:YES];
+//            }];
+//            [alertVC addAction:action];
+//            [self presentViewController:alertVC animated:YES completion:nil];
+//        }
+//    }];
 }
 
 - (void)joinRoomWithToken:(NSString *)roomToken
@@ -824,6 +847,10 @@ static NSInteger streamID = 0;
 }
 - (void)doVideoPressed:(UIButton *)sender {
     self.isVideo = !self.isVideo;
+}
+
+- (void)doHandPressed:(UIButton *)sender {
+    NSLog(@"hand click");
 }
 
 #pragma mark - 信令 chat

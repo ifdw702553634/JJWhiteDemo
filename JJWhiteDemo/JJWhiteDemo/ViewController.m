@@ -15,6 +15,8 @@
 #import "KeyCenter.h"
 #import "UIColor+Extension.h"
 
+
+
 @interface ViewController ()
 
 @property (nonatomic, strong) UITextField *chatTextField;
@@ -81,11 +83,11 @@
         NSString *uid = @"";
         //此处先设置假的uid
         if ([account isEqualToString:@"away"]) {
-            uid = @"123456";
+            uid = @"1";
         }else if ([account isEqualToString:@"mude"]) {
-            uid = @"654321";
+            uid = @"2";
         }else {
-            uid = @"987654";
+            uid = @"1";
         }
         [[AgoraSignal sharedKit] login2:[KeyCenter AppId] account:uid token:@"_no_need_token" uid:0 deviceID:nil retry_time_in_s:60 retry_count:5];
         NSString *lastAccount = [[NSUserDefaults standardUserDefaults] stringForKey:@"uid"];

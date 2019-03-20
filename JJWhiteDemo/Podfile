@@ -11,6 +11,8 @@ target 'JJWhiteDemo' do
   pod 'Masonry'
   pod 'AgoraRtcEngine_iOS'
   pod 'MBProgressHUD'
+  pod 'YYModel'
+  pod 'AFNetworking'
   target 'JJWhiteDemoTests' do
     inherit! :search_paths
     # Pods for testing

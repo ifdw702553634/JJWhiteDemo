@@ -42,7 +42,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3si-Wf-712">
-                        <rect key="frame" x="5" y="114.5" width="30" height="30"/>
+                        <rect key="frame" x="7" y="112.5" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="Oql-L7-rqF"/>
                             <constraint firstAttribute="height" constant="30" id="hce-es-4U6"/>
@@ -54,7 +54,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6tQ-Dm-wDQ">
-                        <rect key="frame" x="35" y="114.5" width="30" height="30"/>
+                        <rect key="frame" x="39" y="112.5" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="cQA-BU-eXi"/>
                             <constraint firstAttribute="height" constant="30" id="gyN-t2-g5Y"/>
@@ -69,15 +69,15 @@
                 <constraints>
                     <constraint firstItem="azf-1F-ACx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="5W8-75-Z3m"/>
                     <constraint firstAttribute="trailingMargin" secondItem="dfx-o6-8E3" secondAttribute="trailing" constant="-11" id="6im-0S-mzB"/>
-                    <constraint firstAttribute="bottom" secondItem="3si-Wf-712" secondAttribute="bottom" constant="5" id="7mD-Us-ZE6"/>
+                    <constraint firstAttribute="bottom" secondItem="3si-Wf-712" secondAttribute="bottom" constant="7" id="7mD-Us-ZE6"/>
                     <constraint firstItem="azf-1F-ACx" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="IiZ-Vu-1Yk"/>
                     <constraint firstItem="6tQ-Dm-wDQ" firstAttribute="bottom" secondItem="3si-Wf-712" secondAttribute="bottom" id="OlB-ZI-aVJ"/>
                     <constraint firstItem="5r2-Mr-xYD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="fFX-9r-q3V"/>
                     <constraint firstItem="5r2-Mr-xYD" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="h74-ZM-ALf"/>
                     <constraint firstAttribute="trailing" secondItem="5r2-Mr-xYD" secondAttribute="trailing" constant="5" id="l72-Dd-uQh"/>
                     <constraint firstItem="dfx-o6-8E3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-6" id="q6R-C9-jI3"/>
-                    <constraint firstItem="6tQ-Dm-wDQ" firstAttribute="leading" secondItem="3si-Wf-712" secondAttribute="trailing" id="v4h-zl-Rij"/>
-                    <constraint firstItem="3si-Wf-712" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="vRk-5N-Xb3"/>
+                    <constraint firstItem="6tQ-Dm-wDQ" firstAttribute="leading" secondItem="3si-Wf-712" secondAttribute="trailing" constant="2" id="v4h-zl-Rij"/>
+                    <constraint firstItem="3si-Wf-712" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="7" id="vRk-5N-Xb3"/>
                     <constraint firstAttribute="bottom" secondItem="5r2-Mr-xYD" secondAttribute="bottom" constant="5" id="wld-2C-qsF"/>
                 </constraints>
             </tableViewCellContentView>
@@ -94,9 +94,9 @@
     </objects>
     <resources>
         <image name="btn_close" width="30" height="30"/>
-        <image name="btn_mute" width="40" height="40"/>
-        <image name="btn_mute_cancel" width="40" height="40"/>
-        <image name="btn_video_off" width="40" height="40"/>
-        <image name="btn_video_on" width="40" height="40"/>
+        <image name="btn_mute" width="160" height="160"/>
+        <image name="btn_mute_cancel" width="160" height="160"/>
+        <image name="btn_video_off" width="160" height="160"/>
+        <image name="btn_video_on" width="160" height="160"/>
     </resources>
 </document>
