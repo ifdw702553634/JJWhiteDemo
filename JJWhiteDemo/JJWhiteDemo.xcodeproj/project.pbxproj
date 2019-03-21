@@ -13,7 +13,6 @@
 		C348000622421AA400CEFA26 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000522421AA400CEFA26 /* SystemConfiguration.framework */; };
 		C348000822421AB100CEFA26 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000722421AB100CEFA26 /* CoreTelephony.framework */; };
 		C348000A22421ABD00CEFA26 /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000922421ABD00CEFA26 /* libresolv.9.tbd */; };
-		C348000C22421ACC00CEFA26 /* AgoraRtmKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000B22421ACC00CEFA26 /* AgoraRtmKit.framework */; };
 		C34800142242244400CEFA26 /* JJApiClient.m in Sources */ = {isa = PBXBuildFile; fileRef = C348000E2242244400CEFA26 /* JJApiClient.m */; };
 		C34800152242244400CEFA26 /* HandlerBusiness.m in Sources */ = {isa = PBXBuildFile; fileRef = C348000F2242244400CEFA26 /* HandlerBusiness.m */; };
 		C34800162242244400CEFA26 /* BaseHandlerBusiness.m in Sources */ = {isa = PBXBuildFile; fileRef = C34800102242244400CEFA26 /* BaseHandlerBusiness.m */; };
@@ -41,6 +40,19 @@
 		C3B8FEB62232188B0050312F /* WhiteRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3B8FEB12232188B0050312F /* WhiteRoomViewController.m */; };
 		C3B8FEB72232188B0050312F /* CommandListController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3B8FEB32232188B0050312F /* CommandListController.m */; };
 		C3B8FEB82232188B0050312F /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3B8FEB42232188B0050312F /* StartViewController.m */; };
+		C3D71CF122431CD700CE2E4D /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71CED22431CD700CE2E4D /* Message.m */; };
+		C3D71CF222431CD700CE2E4D /* AgoraRtm.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71CEE22431CD700CE2E4D /* AgoraRtm.m */; };
+		C3D71CF522432FCC00CE2E4D /* RightView.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71CF422432FCC00CE2E4D /* RightView.m */; };
+		C3D71CF722432FF300CE2E4D /* RightView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3D71CF622432FF300CE2E4D /* RightView.xib */; };
+		C3D71CFB2243396F00CE2E4D /* RightTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71CF92243396F00CE2E4D /* RightTableViewCell.m */; };
+		C3D71CFC2243396F00CE2E4D /* RightTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3D71CFA2243396F00CE2E4D /* RightTableViewCell.xib */; };
+		C3D71D002243687B00CE2E4D /* UIAlertController+AutoHide.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71CFF2243687B00CE2E4D /* UIAlertController+AutoHide.m */; };
+		C3D71D052243698D00CE2E4D /* AgoraRtmKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000B22421ACC00CEFA26 /* AgoraRtmKit.framework */; };
+		C3D71D0D22436A1800CE2E4D /* AppUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71D0922436A1700CE2E4D /* AppUtils.m */; };
+		C3D71D0E22436A1800CE2E4D /* UserDefaultsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71D0B22436A1700CE2E4D /* UserDefaultsUtils.m */; };
+		C3D71D1122436A2A00CE2E4D /* UIView+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71D0F22436A2A00CE2E4D /* UIView+Extension.m */; };
+		C3D71D1822436DA000CE2E4D /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71D1622436DA000CE2E4D /* BaseViewController.m */; };
+		C3D71D1C2243757C00CE2E4D /* SendMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71D1B2243757C00CE2E4D /* SendMessageModel.m */; };
 		C3DCB8C322374D5C00DF4B3C /* WhiteSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3DCB8C122374D5C00DF4B3C /* WhiteSettingViewController.m */; };
 		C3DCB8C422374D5C00DF4B3C /* WhiteSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3DCB8C222374D5C00DF4B3C /* WhiteSettingViewController.xib */; };
 		C3DCB8CA22374E8B00DF4B3C /* WhiteSettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3DCB8C822374E8B00DF4B3C /* WhiteSettingTableViewCell.m */; };
@@ -133,6 +145,30 @@
 		C3B8FEB32232188B0050312F /* CommandListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandListController.m; sourceTree = "<group>"; };
 		C3B8FEB42232188B0050312F /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
 		C3B8FEB52232188B0050312F /* CommandListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandListController.h; sourceTree = "<group>"; };
+		C3D71CED22431CD700CE2E4D /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		C3D71CEE22431CD700CE2E4D /* AgoraRtm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraRtm.m; sourceTree = "<group>"; };
+		C3D71CEF22431CD700CE2E4D /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		C3D71CF022431CD700CE2E4D /* AgoraRtm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraRtm.h; sourceTree = "<group>"; };
+		C3D71CF322432FCC00CE2E4D /* RightView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightView.h; sourceTree = "<group>"; };
+		C3D71CF422432FCC00CE2E4D /* RightView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightView.m; sourceTree = "<group>"; };
+		C3D71CF622432FF300CE2E4D /* RightView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightView.xib; sourceTree = "<group>"; };
+		C3D71CF82243396F00CE2E4D /* RightTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightTableViewCell.h; sourceTree = "<group>"; };
+		C3D71CF92243396F00CE2E4D /* RightTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightTableViewCell.m; sourceTree = "<group>"; };
+		C3D71CFA2243396F00CE2E4D /* RightTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightTableViewCell.xib; sourceTree = "<group>"; };
+		C3D71CFE2243687B00CE2E4D /* UIAlertController+AutoHide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+AutoHide.h"; sourceTree = "<group>"; };
+		C3D71CFF2243687B00CE2E4D /* UIAlertController+AutoHide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+AutoHide.m"; sourceTree = "<group>"; };
+		C3D71D0922436A1700CE2E4D /* AppUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppUtils.m; sourceTree = "<group>"; };
+		C3D71D0A22436A1700CE2E4D /* UserDefaultsUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefaultsUtils.h; sourceTree = "<group>"; };
+		C3D71D0B22436A1700CE2E4D /* UserDefaultsUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDefaultsUtils.m; sourceTree = "<group>"; };
+		C3D71D0C22436A1800CE2E4D /* AppUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppUtils.h; sourceTree = "<group>"; };
+		C3D71D0F22436A2A00CE2E4D /* UIView+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extension.m"; sourceTree = "<group>"; };
+		C3D71D1022436A2A00CE2E4D /* UIView+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extension.h"; sourceTree = "<group>"; };
+		C3D71D1222436A5500CE2E4D /* JJ_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JJ_Prefix.pch; sourceTree = "<group>"; };
+		C3D71D1322436A9500CE2E4D /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		C3D71D1522436DA000CE2E4D /* BaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
+		C3D71D1622436DA000CE2E4D /* BaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
+		C3D71D1A2243757C00CE2E4D /* SendMessageModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SendMessageModel.h; sourceTree = "<group>"; };
+		C3D71D1B2243757C00CE2E4D /* SendMessageModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SendMessageModel.m; sourceTree = "<group>"; };
 		C3DCB8C022374D5C00DF4B3C /* WhiteSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteSettingViewController.h; sourceTree = "<group>"; };
 		C3DCB8C122374D5C00DF4B3C /* WhiteSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteSettingViewController.m; sourceTree = "<group>"; };
 		C3DCB8C222374D5C00DF4B3C /* WhiteSettingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WhiteSettingViewController.xib; sourceTree = "<group>"; };
@@ -156,11 +192,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3D71D052243698D00CE2E4D /* AgoraRtmKit.framework in Frameworks */,
 				C348000A22421ABD00CEFA26 /* libresolv.9.tbd in Frameworks */,
 				C348000822421AB100CEFA26 /* CoreTelephony.framework in Frameworks */,
 				C348000622421AA400CEFA26 /* SystemConfiguration.framework in Frameworks */,
 				C36FA7A2223F301200911170 /* libc++.tbd in Frameworks */,
-				C348000C22421ACC00CEFA26 /* AgoraRtmKit.framework in Frameworks */,
 				8C0A4F5D6EBF7A26E36B9057 /* libPods-JJWhiteDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -235,11 +271,13 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		C36FA7AA223F315F00911170 /* Utils */ = {
+		C36FA7AA223F315F00911170 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C3D71D0822436A0400CE2E4D /* Tools */,
+				C3D71D07224369EE00CE2E4D /* Utils */,
 			);
-			path = Utils;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		C3B8FE72223217A20050312F = {
@@ -267,17 +305,10 @@
 		C3B8FE7D223217A20050312F /* JJWhiteDemo */ = {
 			isa = PBXGroup;
 			children = (
-				C3B8FE7E223217A20050312F /* AppDelegate.h */,
-				C3B8FE7F223217A20050312F /* AppDelegate.m */,
-				C3B8FE81223217A20050312F /* ViewController.h */,
-				C3B8FE82223217A20050312F /* ViewController.m */,
-				C348000D2242244400CEFA26 /* Networking */,
-				2447229C223398B0004991FE /* White */,
-				C3DCB8BF2237494800DF4B3C /* libs */,
-				C36FA7AA223F315F00911170 /* Utils */,
-				C3B8FE87223217A30050312F /* Assets.xcassets */,
-				C3B8FE8C223217A30050312F /* Info.plist */,
-				C3B8FE8D223217A30050312F /* main.m */,
+				C3D71D042243692200CE2E4D /* Application */,
+				C3D71D032243691200CE2E4D /* Classes */,
+				C3D71D01224368C800CE2E4D /* Resource */,
+				C3D71D02224368DC00CE2E4D /* Supporting Files */,
 			);
 			path = JJWhiteDemo;
 			sourceTree = "<group>";
@@ -298,6 +329,108 @@
 				C3B8FEA4223217A40050312F /* Info.plist */,
 			);
 			path = JJWhiteDemoUITests;
+			sourceTree = "<group>";
+		};
+		C3D71CEC22431CBA00CE2E4D /* RTM */ = {
+			isa = PBXGroup;
+			children = (
+				C3D71CF022431CD700CE2E4D /* AgoraRtm.h */,
+				C3D71CEE22431CD700CE2E4D /* AgoraRtm.m */,
+				C3D71CEF22431CD700CE2E4D /* Message.h */,
+				C3D71CED22431CD700CE2E4D /* Message.m */,
+				C3D71D1A2243757C00CE2E4D /* SendMessageModel.h */,
+				C3D71D1B2243757C00CE2E4D /* SendMessageModel.m */,
+			);
+			path = RTM;
+			sourceTree = "<group>";
+		};
+		C3D71CFD224367DD00CE2E4D /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				C3D71D1022436A2A00CE2E4D /* UIView+Extension.h */,
+				C3D71D0F22436A2A00CE2E4D /* UIView+Extension.m */,
+				C3D71CFE2243687B00CE2E4D /* UIAlertController+AutoHide.h */,
+				C3D71CFF2243687B00CE2E4D /* UIAlertController+AutoHide.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		C3D71D01224368C800CE2E4D /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				C3DCB8BF2237494800DF4B3C /* libs */,
+				C3B8FE87223217A30050312F /* Assets.xcassets */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		C3D71D02224368DC00CE2E4D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C3D71D1222436A5500CE2E4D /* JJ_Prefix.pch */,
+				C3B8FE8C223217A30050312F /* Info.plist */,
+				C3B8FE8D223217A30050312F /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C3D71D032243691200CE2E4D /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				C3D71D1422436D8B00CE2E4D /* Base */,
+				C3D71D06224369A800CE2E4D /* Modules */,
+				C348000D2242244400CEFA26 /* Networking */,
+				C3D71CFD224367DD00CE2E4D /* Category */,
+				C36FA7AA223F315F00911170 /* Extensions */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		C3D71D042243692200CE2E4D /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				C3D71D1322436A9500CE2E4D /* Constants.h */,
+				C3B8FE7E223217A20050312F /* AppDelegate.h */,
+				C3B8FE7F223217A20050312F /* AppDelegate.m */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		C3D71D06224369A800CE2E4D /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				C3B8FE81223217A20050312F /* ViewController.h */,
+				C3B8FE82223217A20050312F /* ViewController.m */,
+				2447229C223398B0004991FE /* White */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		C3D71D07224369EE00CE2E4D /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				C3D71D0C22436A1800CE2E4D /* AppUtils.h */,
+				C3D71D0922436A1700CE2E4D /* AppUtils.m */,
+				C3D71D0A22436A1700CE2E4D /* UserDefaultsUtils.h */,
+				C3D71D0B22436A1700CE2E4D /* UserDefaultsUtils.m */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		C3D71D0822436A0400CE2E4D /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		C3D71D1422436D8B00CE2E4D /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				C3D71D1522436DA000CE2E4D /* BaseViewController.h */,
+				C3D71D1622436DA000CE2E4D /* BaseViewController.m */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		C3DCB8BF2237494800DF4B3C /* libs */ = {
@@ -332,6 +465,12 @@
 				C3B83E3E223B3B23003E9443 /* LiveTableViewCell.h */,
 				C3B83E3F223B3B23003E9443 /* LiveTableViewCell.m */,
 				C3B83E40223B3B23003E9443 /* LiveTableViewCell.xib */,
+				C3D71CF322432FCC00CE2E4D /* RightView.h */,
+				C3D71CF422432FCC00CE2E4D /* RightView.m */,
+				C3D71CF622432FF300CE2E4D /* RightView.xib */,
+				C3D71CF82243396F00CE2E4D /* RightTableViewCell.h */,
+				C3D71CF92243396F00CE2E4D /* RightTableViewCell.m */,
+				C3D71CFA2243396F00CE2E4D /* RightTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -361,6 +500,7 @@
 		C3DCB8D1223757AE00DF4B3C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				C3D71CEC22431CBA00CE2E4D /* RTM */,
 				C3DCB8D4223757BD00DF4B3C /* KeyCenter.h */,
 				C3DCB8D2223757BD00DF4B3C /* KeyCenter.m */,
 				C3DCB8D5223757BE00DF4B3C /* VideoSession.h */,
@@ -486,6 +626,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3689BB72237A8130069DC5B /* ToolSelectView.xib in Resources */,
+				C3D71CF722432FF300CE2E4D /* RightView.xib in Resources */,
+				C3D71CFC2243396F00CE2E4D /* RightTableViewCell.xib in Resources */,
 				C3689BC72237B5710069DC5B /* ColorTableViewCell.xib in Resources */,
 				C3DCB8CB22374E8B00DF4B3C /* WhiteSettingTableViewCell.xib in Resources */,
 				C3DCB8D02237532E00DF4B3C /* LiveRoomView.xib in Resources */,
@@ -613,14 +755,21 @@
 				C34800152242244400CEFA26 /* HandlerBusiness.m in Sources */,
 				C3B83E41223B3B23003E9443 /* LiveTableViewCell.m in Sources */,
 				C3B8FE83223217A20050312F /* ViewController.m in Sources */,
+				C3D71CFB2243396F00CE2E4D /* RightTableViewCell.m in Sources */,
 				C3DCB8CE2237532000DF4B3C /* LiveRoomView.m in Sources */,
 				C3689BAF22379B510069DC5B /* WhiteBaseViewController.m in Sources */,
+				C3D71D0D22436A1800CE2E4D /* AppUtils.m in Sources */,
 				C3689BB52237A8060069DC5B /* ToolSelectView.m in Sources */,
 				C3DCB8CA22374E8B00DF4B3C /* WhiteSettingTableViewCell.m in Sources */,
 				C3DCB8C322374D5C00DF4B3C /* WhiteSettingViewController.m in Sources */,
+				C3D71D1C2243757C00CE2E4D /* SendMessageModel.m in Sources */,
+				C3D71CF522432FCC00CE2E4D /* RightView.m in Sources */,
 				C3689BBE2237A8750069DC5B /* ToolSelectTableViewCell.m in Sources */,
+				C3D71D1822436DA000CE2E4D /* BaseViewController.m in Sources */,
 				C3DCB8DA223757BE00DF4B3C /* VideoSession.m in Sources */,
+				C3D71D1122436A2A00CE2E4D /* UIView+Extension.m in Sources */,
 				C3B83E3B223B3A28003E9443 /* LiveTableView.m in Sources */,
+				C3D71CF122431CD700CE2E4D /* Message.m in Sources */,
 				C3B8FE8E223217A30050312F /* main.m in Sources */,
 				C3689BB222379E830069DC5B /* WhiteUtils.m in Sources */,
 				C3B8FE80223217A20050312F /* AppDelegate.m in Sources */,
@@ -629,9 +778,12 @@
 				C3B8FEB82232188B0050312F /* StartViewController.m in Sources */,
 				C34800142242244400CEFA26 /* JJApiClient.m in Sources */,
 				C3DCB8D9223757BE00DF4B3C /* VideoViewLayouter.m in Sources */,
+				C3D71D0E22436A1800CE2E4D /* UserDefaultsUtils.m in Sources */,
+				C3D71D002243687B00CE2E4D /* UIAlertController+AutoHide.m in Sources */,
 				C3B8FEB72232188B0050312F /* CommandListController.m in Sources */,
 				C3DCB8D8223757BE00DF4B3C /* KeyCenter.m in Sources */,
 				C3B8FEB62232188B0050312F /* WhiteRoomViewController.m in Sources */,
+				C3D71CF222431CD700CE2E4D /* AgoraRtm.m in Sources */,
 				C3689BC22237B5000069DC5B /* ColorTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -793,7 +945,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JJWhiteDemo/libs",
+					"$(PROJECT_DIR)/JJWhiteDemo/Resource/libs",
 				);
+				GCC_PREFIX_HEADER = JJWhiteDemo/JJ_Prefix.pch;
 				INFOPLIST_FILE = JJWhiteDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -820,7 +974,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JJWhiteDemo/libs",
+					"$(PROJECT_DIR)/JJWhiteDemo/Resource/libs",
 				);
+				GCC_PREFIX_HEADER = JJWhiteDemo/JJ_Prefix.pch;
 				INFOPLIST_FILE = JJWhiteDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
