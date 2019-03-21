@@ -23,12 +23,12 @@
         self.selfLabel.text = @"自己";
         self.muteBtn.hidden = YES;
         self.cancelBtn.hidden = YES;
-        self.videoBtn.hidden = YES;
+        self.pencilBtn.hidden = YES;
     }else {
         self.selfLabel.text = [NSString stringWithFormat:@"%ld",uid];
         [self.selfLabel setBackgroundColor:THEME_COLOR];
         self.muteBtn.hidden = NO;
-        self.videoBtn.hidden = NO;
+        self.pencilBtn.hidden = NO;
         self.cancelBtn.hidden = NO;
     }
 }
@@ -39,13 +39,9 @@
     // Configure the view for the selected state
 }
 - (IBAction)muteBtnClick:(UIButton *)sender {
-    if (sender.tag == 1) {
-        
-    }else if (sender.tag == 2) {
-        
-    }else if (sender.tag == 3) {
-        
-    }
+    //按钮点击 发送通知
+    NSDictionary *dic = @{@"btnType":@(sender.tag), @"uid":@(_uid)};
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"videoButtonClick" object:dic];
 }
 
 

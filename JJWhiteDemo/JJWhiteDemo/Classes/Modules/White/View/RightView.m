@@ -65,10 +65,9 @@ static NSString *kRightTableViewCell = @"RightTableViewCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     Message *msg = self.list[indexPath.row];
-    CellType type = [msg.userId isEqualToString:AgoraRtm.current] ? CellTypeRight : CellTypeLeft;
     
     RightTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kRightTableViewCell forIndexPath:indexPath];
-    [cell updateType:type message:msg];
+    cell.message = msg;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

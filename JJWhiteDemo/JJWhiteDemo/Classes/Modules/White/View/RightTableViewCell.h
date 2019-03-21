@@ -9,17 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "Message.h"
 
-typedef NS_ENUM(NSInteger, CellType) {
-    CellTypeLeft,
-    CellTypeRight
-};
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RightTableViewCell : UITableViewCell
-
-- (void)updateType:(CellType)type message:(Message *)message;
-
+@property (nonatomic, copy) Message *message;
 @end
 
 NS_ASSUME_NONNULL_END

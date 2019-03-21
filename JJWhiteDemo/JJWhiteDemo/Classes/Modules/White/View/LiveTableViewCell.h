@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *muteBtn;
 @property (weak, nonatomic) IBOutlet UILabel *selfLabel;
-@property (weak, nonatomic) IBOutlet UIButton *videoBtn;
+@property (weak, nonatomic) IBOutlet UIButton *pencilBtn;
 
 @property (assign, nonatomic) NSUInteger uid;
 @end

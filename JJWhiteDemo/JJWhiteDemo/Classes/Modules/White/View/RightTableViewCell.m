@@ -7,71 +7,35 @@
 //
 
 #import "RightTableViewCell.h"
+#import "SendMessageModel.h"
 
 @interface RightTableViewCell()
-@property (weak, nonatomic) IBOutlet UIView *leftUserBgView;
-@property (weak, nonatomic) IBOutlet UILabel *leftUserLabel;
-@property (weak, nonatomic) IBOutlet UIView *leftContentBgView;
-@property (weak, nonatomic) IBOutlet UILabel *leftContentLabel;
-@property (weak, nonatomic) IBOutlet UIView *rightUserBgView;
-@property (weak, nonatomic) IBOutlet UILabel *rightUserLabel;
-@property (weak, nonatomic) IBOutlet UIView *rightContentBgView;
-@property (weak, nonatomic) IBOutlet UILabel *rightContentLabel;
+@property (weak, nonatomic) IBOutlet UILabel *contentLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
-@property (nonatomic, assign) CellType type;
-@property (nonatomic, copy) NSString *user;
-@property (nonatomic, copy) NSString *content;
 
 @end
 
 @implementation RightTableViewCell
 
-- (void)setType:(CellType)type {
-    _type = type;
-    BOOL rightHidden = type == CellTypeLeft ? true : false;
-    
-    self.rightUserLabel.hidden = rightHidden;
-    self.rightContentLabel.hidden = rightHidden;
-    
-    self.rightUserBgView.hidden = rightHidden;
-    self.rightContentBgView.hidden = rightHidden;
-    
-    self.leftUserLabel.hidden = !rightHidden;
-    self.leftContentLabel.hidden = !rightHidden;
-    
-    self.leftUserBgView.hidden = !rightHidden;
-    self.leftContentBgView.hidden = !rightHidden;
-}
-
-- (void)setUser:(NSString *)user {
-    _user = [user copy];
-    switch (self.type) {
-        case CellTypeLeft: self.leftUserLabel.text = user; break;
-        case CellTypeRight: self.rightUserLabel.text = user; break;
-    }
-}
-
-- (void)setContent:(NSString *)content {
-    _content = [content copy];
-    switch (self.type) {
-        case CellTypeLeft: self.leftContentLabel.text = content; break;
-        case CellTypeRight: self.rightContentLabel.text = content; break;
-    }
-}
-
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.rightUserBgView.layer.cornerRadius = 20;
-    self.rightContentBgView.layer.cornerRadius = 5;
-    
-    self.leftUserBgView.layer.cornerRadius = 20;
-    self.leftContentBgView.layer.cornerRadius = 5;
 }
 
-- (void)updateType:(CellType)type message:(Message *)message {
-    self.type = type;
-    self.user = message.userId;
-    self.content = message.text;
+- (void)setMessage:(Message *)message {
+    _message = message;
+    SendMessageModel *msg = [SendMessageModel yy_modelWithJSON:message.text];
+    if (!msg) {
+        _contentLabel.text = [NSString stringWithFormat:@"%@说：%@",message.userId,message.text];
+        _timeLabel.text = @"暂无";
+    }
+    if (msg.type == 1) {
+        _contentLabel.text = [NSString stringWithFormat:@"%ld举手了",(long)msg.fromUser];
+        _timeLabel.text = msg.time;
+    }else if (msg.type == 4) {
+        _contentLabel.text = [NSString stringWithFormat:@"%ld说了：%@",(long)msg.fromUser,msg.msg];
+        _timeLabel.text = msg.time;
+    }
 }
 
 @end

@@ -93,7 +93,7 @@ static NSInteger streamID = 0;
     
     //RTM 相关
     [AgoraRtm updateDelegate:self];
-    [self addKeyboradObserver];
+    [self addNotificationObserver];
     // Do any additional setup after loading the view.
 }
 
@@ -830,6 +830,19 @@ static NSInteger streamID = 0;
 
 - (void)doHandPressed:(UIButton *)sender {
     NSLog(@"hand click");
+    SendMessageModel *model = [[SendMessageModel alloc] init];
+    model.type = 1;
+    model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
+    model.toUser = [self.mode.name integerValue];
+    model.msg = @"举手";
+    model.time = [AppUtils getCurrentTimes];
+    NSString *dataStr = [model yy_modelToJSONString];
+    AgoraRtmMessage *message = [[AgoraRtmMessage alloc] initWithText:dataStr];
+    __weak WhiteRoomViewController *weakSelf = self;
+    [AgoraRtm.kit sendMessage:message toPeer:self.mode.name completion:^(AgoraRtmSendPeerMessageState state) {
+        NSLog(@"send peer msg error: %ld", (long)state);
+        [weakSelf appendMsg:dataStr user:AgoraRtm.current];
+    }];
 }
 
 - (void)doChatPressed:(UIButton *)sender {
@@ -871,9 +884,6 @@ static NSInteger streamID = 0;
 }
 
 - (void)appendMsg:(NSString *)text user:(NSString *)user {
-    
-    
-    
     Message *msg = [[Message alloc] init];
     msg.userId = user;
     msg.text = text;
@@ -890,10 +900,47 @@ static NSInteger streamID = 0;
     return YES;
 }
 
-- (void)addKeyboradObserver {
+- (void)addNotificationObserver {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardFrameWillChange:)
                                                  name:UIKeyboardWillChangeFrameNotification object:nil];
+    //注册颜色变化的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoButtonClick:) name:@"videoButtonClick" object:nil];
+}
+
+//接收通知，改变color icon的颜色
+- (void)videoButtonClick:(NSNotification *)noti{
+    
+    SendMessageModel *model = [[SendMessageModel alloc] init];
+    model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
+    model.toUser = [[noti object][@"uid"] integerValue];
+    model.time = [AppUtils getCurrentTimes];
+    //使用object处理消息
+    NSInteger tag = [[noti object][@"btnType"] integerValue];
+    //TODO 类型不够
+    switch (tag) {
+        case ButtonTypeCancel:
+            model.type = 5;
+            model.msg = @"移除麦序";
+            break;
+        case ButtonTypeAudio:
+            model.type = 2;
+            model.msg = @"麦克风";
+            break;
+        case ButtonTypePencil:
+            model.type = 3;
+            model.msg = @"手写笔";
+            break;
+        default:
+            break;
+    }
+    NSString *dataStr = [model yy_modelToJSONString];
+    AgoraRtmMessage *message = [[AgoraRtmMessage alloc] initWithText:dataStr];
+    __weak WhiteRoomViewController *weakSelf = self;
+    [AgoraRtm.kit sendMessage:message toPeer:self.mode.name completion:^(AgoraRtmSendPeerMessageState state) {
+        NSLog(@"send peer msg error: %ld", (long)state);
+        [weakSelf appendMsg:dataStr user:AgoraRtm.current];
+    }];
 }
 
 - (void)keyboardFrameWillChange:(NSNotification *)notification {
@@ -949,15 +996,15 @@ static NSInteger streamID = 0;
     model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
     model.toUser = [peer integerValue];
     model.msg = msg;
+    model.time = [AppUtils getCurrentTimes];
     NSString *dataStr = [model yy_modelToJSONString];
     AgoraRtmMessage *message = [[AgoraRtmMessage alloc] initWithText:dataStr];
-    
     
     __weak WhiteRoomViewController *weakSelf = self;
     
     [AgoraRtm.kit sendMessage:message toPeer:peer completion:^(AgoraRtmSendPeerMessageState state) {
         NSLog(@"send peer msg error: %ld", (long)state);
-        [weakSelf appendMsg:msg user:AgoraRtm.current];
+        [weakSelf appendMsg:dataStr user:AgoraRtm.current];
     }];
 }
 #pragma mark - AgoraRtmDelegate
@@ -966,12 +1013,7 @@ static NSInteger streamID = 0;
 }
 
 - (void)rtmKit:(AgoraRtmKit *)kit messageReceived:(AgoraRtmMessage *)message fromPeer:(NSString *)peerId {
-    
-    SendMessageModel *msg = [SendMessageModel yy_modelWithJSON:message.text];
-    if (msg.type == 4) {
-        [self appendMsg:msg.msg user:peerId];
-    }
-    
+    [self appendMsg:message.text user:peerId];
 }
 
 @end

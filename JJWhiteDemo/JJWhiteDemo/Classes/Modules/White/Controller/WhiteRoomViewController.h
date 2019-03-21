@@ -20,6 +20,13 @@ typedef struct  {
     NSString *name;
 } ChatMode;
 
+//接受按钮点击通知
+typedef NS_ENUM(NSInteger, ButtonType) {
+    ButtonTypeCancel = 1,
+    ButtonTypeAudio = 2,
+    ButtonTypePencil = 3
+};
+
 
 @class WhiteRoomViewController;
 @protocol LiveRoomDelegate <NSObject>

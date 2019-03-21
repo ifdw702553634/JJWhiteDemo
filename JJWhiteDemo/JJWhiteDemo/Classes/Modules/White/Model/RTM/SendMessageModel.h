@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger fromUser;
 @property (nonatomic, assign) NSInteger toUser;
 @property (nonatomic, copy) NSString *msg;
+@property (nonatomic, copy) NSString *time;
 @end
 
 NS_ASSUME_NONNULL_END

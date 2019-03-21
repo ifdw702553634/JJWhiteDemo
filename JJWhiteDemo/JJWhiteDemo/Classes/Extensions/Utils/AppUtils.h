@@ -53,4 +53,6 @@
 + (NSDate *)zeroOfDate;
 //如果想要判断设备是ipad，要用如下方法
 + (BOOL)getIsIpad;
+//获取当前时间
++ (NSString*)getCurrentTimes;
 @end
