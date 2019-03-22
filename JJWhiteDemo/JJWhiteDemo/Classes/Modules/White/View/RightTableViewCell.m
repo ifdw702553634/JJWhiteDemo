@@ -32,6 +32,12 @@
     if (msg.type == 1) {
         _contentLabel.text = [NSString stringWithFormat:@"%ld举手了",(long)msg.fromUser];
         _timeLabel.text = msg.time;
+    }else if (msg.type == 2) {
+        _contentLabel.text = [NSString stringWithFormat:@"%ld麦克风",(long)msg.fromUser];
+        _timeLabel.text = msg.time;
+    }else if (msg.type == 3) {
+        _contentLabel.text = [NSString stringWithFormat:@"%ld手写笔",(long)msg.fromUser];
+        _timeLabel.text = msg.time;
     }else if (msg.type == 4) {
         _contentLabel.text = [NSString stringWithFormat:@"%ld说了：%@",(long)msg.fromUser,msg.msg];
         _timeLabel.text = msg.time;
