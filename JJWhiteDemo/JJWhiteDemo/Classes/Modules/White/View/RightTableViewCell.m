@@ -29,17 +29,17 @@
         _contentLabel.text = [NSString stringWithFormat:@"%@说：%@",message.userId,message.text];
         _timeLabel.text = @"暂无";
     }
-    if (msg.type == 1) {
+    if (msg.type == MessageTypeHand) {
         _contentLabel.text = [NSString stringWithFormat:@"%ld举手了",(long)msg.fromUser];
         _timeLabel.text = msg.time;
-    }else if (msg.type == 2) {
-        _contentLabel.text = [NSString stringWithFormat:@"%ld麦克风",(long)msg.fromUser];
-        _timeLabel.text = msg.time;
-    }else if (msg.type == 3) {
-        _contentLabel.text = [NSString stringWithFormat:@"%ld手写笔",(long)msg.fromUser];
-        _timeLabel.text = msg.time;
-    }else if (msg.type == 4) {
+    }else if (msg.type == MessageTypeMessage) {
         _contentLabel.text = [NSString stringWithFormat:@"%ld说了：%@",(long)msg.fromUser,msg.msg];
+        _timeLabel.text = msg.time;
+    }else if (msg.type == MessageTypeOnSpeak) {
+        _contentLabel.text = [NSString stringWithFormat:@"%ld被提上麦序",(long)msg.toUser];
+        _timeLabel.text = msg.time;
+    }else if (msg.type == MessageTypeOffSpeak) {
+        _contentLabel.text = [NSString stringWithFormat:@"%ld被踢出麦序",(long)msg.toUser];
         _timeLabel.text = msg.time;
     }
 }

@@ -9,14 +9,6 @@
 #import "ToolSelectView.h"
 
 
-typedef NS_ENUM(NSInteger, ToolType) {
-    TypeCancel,
-    ToolTypePencil,
-    ToolTypeText,
-    ToolTypeColor,
-    ToolTypeEraser,
-    ToolTypeSelector
-};
 
 static NSString *kToolSelectTableViewCell = @"ToolSelectTableViewCell";
 

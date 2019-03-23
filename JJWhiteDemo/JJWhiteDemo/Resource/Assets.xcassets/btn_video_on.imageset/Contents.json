@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "btn_video_on.png",
+      "filename" : "btn_video_off.png",
       "scale" : "1x"
     },
     {

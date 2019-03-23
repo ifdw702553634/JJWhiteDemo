@@ -7,7 +7,6 @@
 //
 
 #import "WhiteRoomViewController.h"
-#import "CommandListController.h"
 #import "AppDelegate.h"
 #import "WhiteUtils.h"
 #import "ToolSelectView.h"
@@ -45,7 +44,7 @@
 @property (assign, nonatomic) BOOL isBroadcaster;//是否主播模式
 @property (assign, nonatomic) BOOL isAudio;//语音是否开启
 @property (assign, nonatomic) BOOL isVideo;//视频是否开启
-
+@property (assign, nonatomic) BOOL isPencil;//是否允许手写
 @property (nonatomic, assign) AgoraClientRole isTeacher;//是否是老师，用于辨别唯一
 
 @property (strong, nonatomic) NSMutableArray<VideoSession *> *videoSessions;
@@ -148,6 +147,8 @@ static NSInteger streamID = 0;
     }];
     
     self.liveTableView = [[NSBundle mainBundle] loadNibNamed:@"LiveTableView" owner:nil options:nil][0];
+    //传入teacherid
+    self.liveTableView.teacherId = [self.mode.name integerValue];
     [self.view addSubview:_liveTableView];
     [_liveTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.chatButton.mas_bottom).offset(0);
@@ -286,11 +287,40 @@ static NSInteger streamID = 0;
 - (void)setIsAudio:(BOOL)isAudio {
     _isAudio = isAudio;
     [self.rtcEngine muteLocalAudioStream:isAudio];
-
     //通知主线程刷新
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.audioMuteButton setImage:[UIImage imageNamed:(isAudio ? @"btn_mute_cancel" : @"btn_mute")] forState:UIControlStateNormal];
         //回调或者说是通知主线程刷新，
+        //学生身份开关麦克风，发消息给老师
+        if (self.isTeacher == AgoraClientRoleAudience) {
+            SendMessageModel *model = [[SendMessageModel alloc] init];
+            model.type = isAudio ? MessageTypeCloseAudio : MessageTypeOpenAudio;
+            model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
+            model.toUser = [self.mode.name integerValue];
+            model.msg = isAudio ? @"关闭麦克风" : @"打开麦克风";
+            model.time = [AppUtils getCurrentTimes];
+            [self sendMessageWithPeer:self.mode.name model:model];
+        }
+    });
+}
+
+- (void)setIsPencil:(BOOL)isPencil {
+    _isPencil = isPencil;
+    [self.room setViewMode:isPencil ? WhiteViewModeFollower : WhiteViewModeBroadcaster];
+    [self.room disableOperations:isPencil];
+    //通知主线程刷新
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //回调或者说是通知主线程刷新，
+        //学生身份开关麦克风，发消息给老师
+        if (self.isTeacher == AgoraClientRoleAudience) {
+            SendMessageModel *model = [[SendMessageModel alloc] init];
+            model.type = isPencil ? MessageTypeClosePencil : MessageTypeOpenPencil;
+            model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
+            model.toUser = [self.mode.name integerValue];
+            model.msg = isPencil ? @"关闭手写笔" : @"打开手写笔";
+            model.time = [AppUtils getCurrentTimes];
+            [self sendMessageWithPeer:self.mode.name model:model];
+        }
     });
 }
 
@@ -335,28 +365,6 @@ static NSInteger streamID = 0;
     return _roomCallbackDelegate;
 }
 
-#pragma mark - BarItem
-- (void)setupShareBarItem
-{
-    UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"设置 API", nil) style:UIBarButtonItemStylePlain target:self action:@selector(settingAPI:)];
-    UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"分享", nil) style:UIBarButtonItemStylePlain target:self action:@selector(shareRoom:)];
-    
-    self.navigationItem.rightBarButtonItems = @[item1, item2];
-}
-
-- (void)settingAPI:(id)sender
-{
-    CommandListController *controller = [[CommandListController alloc] initWithRoom:self.room];
-    [self showPopoverViewController:controller sourceView:sender];
-}
-
-- (void)shareRoom:(id)sender
-{
-    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[self.roomUuid ? :@""] applicationActivities:nil];
-    activityVC.popoverPresentationController.sourceView = [self.navigationItem.rightBarButtonItem valueForKey:@"view"];
-    [self presentViewController:activityVC animated:YES completion:nil];
-    NSLog(@"%@", [NSString stringWithFormat:NSLocalizedString(@"房间 UUID: %@", nil), self.roomUuid]);
-}
 
 #pragma mark - Room Action
 
@@ -447,15 +455,13 @@ static NSInteger streamID = 0;
     self.sdk = [[WhiteSDK alloc] initWithWhiteBoardView:self.boardView config:config commonCallbackDelegate:self.commonDelegate];
     [self.sdk joinRoomWithRoomUuid:self.roomUuid roomToken:roomToken callbacks:self.roomCallbackDelegate completionHandler:^(BOOL success, WhiteRoom * _Nonnull room, NSError * _Nonnull error) {
         if (success) {
-//            self.title = NSLocalizedString(@"我的白板", nil);
             
             [self.progressHUD removeFromSuperview];
             self.progressHUD = nil;
             
             self.roomToken = roomToken;
             self.room = room;
-            [self.room addMagixEventListener:CommandCustomEvent];
-            [self setupShareBarItem];
+            [self.room addMagixEventListener:@"CommandCustomEvent"];
             [self roleSettings];
             [self toolInit];
             
@@ -633,6 +639,9 @@ static NSInteger streamID = 0;
     if ([self.delegate respondsToSelector:@selector(liveVCNeedClose:)]) {
         [self.delegate liveVCNeedClose:self];
     }
+    
+    //TODO 向所有人发送关闭直播间的信息
+    
 }
 
 - (void)setIdleTimerActive:(BOOL)active {
@@ -708,12 +717,9 @@ static NSInteger streamID = 0;
 - (void)roleSettings {
     self.toolSelectView.room = self.room;
     if (self.isBroadcaster) {
-        [self.room setViewMode:WhiteViewModeBroadcaster];
-        [self.room disableOperations:NO];
+        self.isPencil = NO;
     }else {
-        //设置游客模式 只读
-        [self.room setViewMode:WhiteViewModeFollower];
-        [self.room disableOperations:YES];
+        self.isPencil = YES;
     }
 }
 
@@ -800,10 +806,7 @@ static NSInteger streamID = 0;
 - (void)doBroadcastPressed:(UIButton *)sender {
     if (self.isBroadcaster) {
         self.clientRole = AgoraClientRoleAudience;
-        //重新设置为跟随模式
-        [self.room setViewMode:WhiteViewModeFollower];
-        //禁用手势
-        [self.room disableOperations:YES];
+        self.isPencil = YES;
         if (self.fullSession.uid == 0) {
             self.fullSession = nil;
         }
@@ -811,8 +814,7 @@ static NSInteger streamID = 0;
         self.isAudio = NO;
         self.isVideo = NO;
         self.clientRole = AgoraClientRoleBroadcaster;
-        //不禁用手势
-        [self.room disableOperations:NO];
+        self.isPencil = NO;
     }
     
     [self.rtcEngine setClientRole:self.clientRole];
@@ -831,18 +833,12 @@ static NSInteger streamID = 0;
 - (void)doHandPressed:(UIButton *)sender {
     NSLog(@"hand click");
     SendMessageModel *model = [[SendMessageModel alloc] init];
-    model.type = 1;
+    model.type = MessageTypeHand;
     model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
     model.toUser = [self.mode.name integerValue];
     model.msg = @"举手";
     model.time = [AppUtils getCurrentTimes];
-    NSString *dataStr = [model yy_modelToJSONString];
-    AgoraRtmMessage *message = [[AgoraRtmMessage alloc] initWithText:dataStr];
-    __weak WhiteRoomViewController *weakSelf = self;
-    [AgoraRtm.kit sendMessage:message toPeer:self.mode.name completion:^(AgoraRtmSendPeerMessageState state) {
-        NSLog(@"send peer msg error: %ld", (long)state);
-        [weakSelf appendMsg:dataStr user:AgoraRtm.current];
-    }];
+    [self sendMessageWithPeer:self.mode.name model:model];
 }
 
 - (void)doChatPressed:(UIButton *)sender {
@@ -883,12 +879,18 @@ static NSInteger streamID = 0;
     return _list;
 }
 
+//所有消息，包括发出去跟接收到的
 - (void)appendMsg:(NSString *)text user:(NSString *)user {
     Message *msg = [[Message alloc] init];
     msg.userId = user;
     msg.text = text;
-    [self.list addObject:msg];
-    self.rightView.list = [self.list mutableCopy];
+    SendMessageModel *model = [SendMessageModel yy_modelWithJSON:text];
+    //部分信息需要显示在聊天屏上
+    if (model.type == MessageTypeOnSpeak || model.type == MessageTypeOffSpeak
+        || model.type == MessageTypeHand || model.type == MessageTypeMessage) {
+        [self.list addObject:msg];
+        self.rightView.list = [self.list mutableCopy];
+    }
 }
 
 - (BOOL)pressedReturnToSendText:(NSString *)text {
@@ -904,43 +906,19 @@ static NSInteger streamID = 0;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardFrameWillChange:)
                                                  name:UIKeyboardWillChangeFrameNotification object:nil];
-    //注册颜色变化的通知
+    //注册按钮点击通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoButtonClick:) name:@"videoButtonClick" object:nil];
 }
 
-//接收通知，改变color icon的颜色
+//接收按钮点击通知
 - (void)videoButtonClick:(NSNotification *)noti{
-    
     SendMessageModel *model = [[SendMessageModel alloc] init];
     model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
     model.toUser = [[noti object][@"uid"] integerValue];
     model.time = [AppUtils getCurrentTimes];
-    //使用object处理消息
-    NSInteger tag = [[noti object][@"btnType"] integerValue];
-    //TODO 类型不够
-    switch (tag) {
-        case ButtonTypeCancel:
-            model.type = 5;
-            model.msg = @"移除麦序";
-            break;
-        case ButtonTypeAudio:
-            model.type = 2;
-            model.msg = @"麦克风";
-            break;
-        case ButtonTypePencil:
-            model.type = 3;
-            model.msg = @"手写笔";
-            break;
-        default:
-            break;
-    }
-    NSString *dataStr = [model yy_modelToJSONString];
-    AgoraRtmMessage *message = [[AgoraRtmMessage alloc] initWithText:dataStr];
-    __weak WhiteRoomViewController *weakSelf = self;
-    [AgoraRtm.kit sendMessage:message toPeer:self.mode.name completion:^(AgoraRtmSendPeerMessageState state) {
-        NSLog(@"send peer msg error: %ld", (long)state);
-        [weakSelf appendMsg:dataStr user:AgoraRtm.current];
-    }];
+    model.type = [[noti object][@"messageType"] integerValue];
+    model.msg = [noti object][@"msg"];
+    [self sendMessageWithPeer:[NSString stringWithFormat:@"%@",[noti object][@"uid"]] model:model];
 }
 
 - (void)keyboardFrameWillChange:(NSNotification *)notification {
@@ -990,23 +968,27 @@ static NSInteger streamID = 0;
 }
 
 #pragma mark - Peer
+//输入框发送文本信息
 - (void)sendPeer:(NSString *)peer msg: (NSString *)msg {
     SendMessageModel *model = [[SendMessageModel alloc] init];
-    model.type = 4;
+    model.type = MessageTypeMessage;
     model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
     model.toUser = [peer integerValue];
     model.msg = msg;
     model.time = [AppUtils getCurrentTimes];
+    [self sendMessageWithPeer:peer model:model];
+}
+
+- (void)sendMessageWithPeer:(NSString *)peer model:(SendMessageModel *)model {
     NSString *dataStr = [model yy_modelToJSONString];
     AgoraRtmMessage *message = [[AgoraRtmMessage alloc] initWithText:dataStr];
-    
     __weak WhiteRoomViewController *weakSelf = self;
-    
     [AgoraRtm.kit sendMessage:message toPeer:peer completion:^(AgoraRtmSendPeerMessageState state) {
         NSLog(@"send peer msg error: %ld", (long)state);
         [weakSelf appendMsg:dataStr user:AgoraRtm.current];
     }];
 }
+
 #pragma mark - AgoraRtmDelegate
 - (void)rtmKit:(AgoraRtmKit *)kit connectionStateChanged:(AgoraRtmConnectionState)state reason:(AgoraRtmConnectionChangeReason)reason {
     NSLog(@"connection state changed: %ld", (long)reason);
@@ -1014,6 +996,108 @@ static NSInteger streamID = 0;
 
 - (void)rtmKit:(AgoraRtmKit *)kit messageReceived:(AgoraRtmMessage *)message fromPeer:(NSString *)peerId {
     [self appendMsg:message.text user:peerId];
+    SendMessageModel *model = [SendMessageModel yy_modelWithJSON:message.text];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self messageEventWithMessageType:model];
+    });
+}
+
+//对收到的消息进行处理
+- (void)messageEventWithMessageType:(SendMessageModel *)model {
+    NSInteger type = model.type;
+    //学生收到消息处理消息
+    if (self.isTeacher == AgoraClientRoleAudience) {
+        //收到消息后，反向发送通知
+        if (type == MessageTypeClosePencil || type == MessageTypeCloseAudio
+            || type == MessageTypeOpenPencil || type == MessageTypeCloseAudio) {
+            NSDictionary *dic = @{@"messageType": @(type)};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"audioMsgSuccess" object:dic];
+        }
+        switch (type) {
+            case MessageTypeHand:
+                DBG(@"*****举手*****");
+                break;
+            case MessageTypeCloseAudio:
+                self.isAudio = YES;
+                DBG(@"*****关闭麦克风*****");
+                break;
+            case MessageTypeOpenAudio:
+                self.isAudio = NO;
+                DBG(@"*****打开麦克风*****");
+                break;
+            case MessageTypeClosePencil:
+                self.isPencil = YES;
+                DBG(@"*****关闭手写笔*****");
+                break;
+            case MessageTypeOpenPencil:
+                self.isPencil = NO;
+                DBG(@"*****打开手写笔*****");
+                break;
+            case MessageTypeMessage:
+                DBG(@"*****课程内信息*****");
+                break;
+            case MessageTypeOnSpeak:
+                self.clientRole = AgoraClientRoleBroadcaster;
+                self.isAudio = NO;
+                self.isVideo = NO;
+                self.isPencil = NO;
+                self.handButton.hidden = YES;
+                [self.rtcEngine setClientRole:self.clientRole];
+                [self updateInterfaceWithAnimation:YES];
+                DBG(@"*****拉上麦序*****");
+                break;
+            case MessageTypeOffSpeak:
+                self.clientRole = AgoraClientRoleAudience;
+                self.isPencil = YES;
+                self.handButton.hidden = NO;
+                if (self.fullSession.uid == 0) {
+                    self.fullSession = nil;
+                }
+                [self.rtcEngine setClientRole:self.clientRole];
+                [self updateInterfaceWithAnimation:YES];
+                DBG(@"*****踢出麦序*****");
+                break;
+            case MessageTypeOver:
+                [self setAlert:@"课程结束"];
+                DBG(@"*****课程结束*****");
+                break;
+            default:
+                break;
+        }
+    }else {
+        //TODO 老师端收到消息的处理
+        switch (type) {
+            case MessageTypeHand:
+            {
+                UIAlertController *ac=[UIAlertController alertControllerWithTitle:ALERT_TITLE message:[NSString stringWithFormat:@"%ld举手了",(long)model.fromUser] preferredStyle:UIAlertControllerStyleAlert];
+                [ac setCancelTitle:@"忽略" SureTitle:@"上麦" cancelBlock:^(UIAlertAction * _Nullable action) {
+                } sureBlock:^(UIAlertAction * _Nullable action) {
+                    SendMessageModel *msgModel = [[SendMessageModel alloc] init];
+                    msgModel.type = MessageTypeOnSpeak;
+                    msgModel.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
+                    msgModel.toUser = model.fromUser;
+                    msgModel.msg = @"拉上麦序";
+                    msgModel.time = [AppUtils getCurrentTimes];
+                    [self sendMessageWithPeer:[NSString stringWithFormat:@"%ld",(long)model.fromUser] model:msgModel];
+                }];
+                [self presentViewController:ac animated:YES completion:nil];
+                break;
+            }
+            case MessageTypeCloseAudio:
+            case MessageTypeOpenAudio:
+            case MessageTypeOpenPencil:
+            case MessageTypeClosePencil:
+                //收到开关麦克风的消息后，发送消息
+            {
+                NSDictionary *dic = @{@"messageType": @(type)};
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"audioMsgSuccess" object:dic];
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 @end

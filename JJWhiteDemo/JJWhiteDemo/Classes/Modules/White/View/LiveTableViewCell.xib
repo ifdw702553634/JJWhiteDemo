@@ -64,7 +64,7 @@
                             <constraint firstAttribute="height" constant="30" id="gyN-t2-g5Y"/>
                         </constraints>
                         <state key="normal" image="btn_pencil_on"/>
-                        <state key="selected" image="btn_video_off"/>
+                        <state key="selected" image="btn_pencil_off"/>
                         <connections>
                             <action selector="muteBtnClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="uh9-uX-MFp"/>
                         </connections>
@@ -100,7 +100,7 @@
         <image name="btn_close" width="120" height="120"/>
         <image name="btn_mute" width="160" height="160"/>
         <image name="btn_mute_cancel" width="160" height="160"/>
+        <image name="btn_pencil_off" width="160" height="160"/>
         <image name="btn_pencil_on" width="160" height="160"/>
-        <image name="btn_video_off" width="160" height="160"/>
     </resources>
 </document>

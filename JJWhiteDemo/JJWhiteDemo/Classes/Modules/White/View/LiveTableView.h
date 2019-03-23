@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSArray<VideoSession *> *sessions;
 
+@property (nonatomic, assign) NSInteger teacherId;
+
 @end
 
 NS_ASSUME_NONNULL_END

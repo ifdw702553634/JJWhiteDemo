@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIButton *pencilBtn;
 
 @property (assign, nonatomic) NSUInteger uid;
+@property (nonatomic, assign) NSInteger teacherId;
 @end
 
 NS_ASSUME_NONNULL_END

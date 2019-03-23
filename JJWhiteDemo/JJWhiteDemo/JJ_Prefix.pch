@@ -15,4 +15,5 @@
 #import <WhiteSDK.h>
 #import "AppUtils.h"
 #import "BaseViewController.h"
+#import "Enumeration.h"
 #endif /* JJ_Prefix_pch */

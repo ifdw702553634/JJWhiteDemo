@@ -53,6 +53,7 @@ static NSString *kLiveTableViewCell = @"LiveTableViewCell";
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     LiveTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kLiveTableViewCell forIndexPath:indexPath];
     [self.viewLayouter layoutSessions:@[_sessions[indexPath.row]] fullSession:nil inContainer:cell.liveView];
+    cell.teacherId = self.teacherId;
     cell.uid = _sessions[indexPath.row].uid;
     return cell;
 }

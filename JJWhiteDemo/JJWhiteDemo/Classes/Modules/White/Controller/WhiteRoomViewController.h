@@ -9,24 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "WhiteBaseViewController.h"
 
-//RTM  相关
-typedef NS_ENUM(NSInteger, ChatType) {
-    ChatTypePeer = 0,
-    ChatTypeGroup
-};
-
 typedef struct  {
     ChatType type;
     NSString *name;
 } ChatMode;
-
-//接受按钮点击通知
-typedef NS_ENUM(NSInteger, ButtonType) {
-    ButtonTypeCancel = 1,
-    ButtonTypeAudio = 2,
-    ButtonTypePencil = 3
-};
-
 
 @class WhiteRoomViewController;
 @protocol LiveRoomDelegate <NSObject>

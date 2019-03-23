@@ -84,6 +84,7 @@
 /* Begin PBXFileReference section */
 		093D3B89F404E8B2FE5D1B83 /* libPods-JJWhiteDemoUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JJWhiteDemoUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CEA9DDA25B3D9BA1312E470 /* Pods-JJWhiteDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemo/Pods-JJWhiteDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		241763CB224483B1000ED24D /* Enumeration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Enumeration.h; sourceTree = "<group>"; };
 		3739C2E9D3D2DBD13DEF53B4 /* Pods-JJWhiteDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemo/Pods-JJWhiteDemo.release.xcconfig"; sourceTree = "<group>"; };
 		481B2E6E520F831A3E51C7A6 /* Pods-JJWhiteDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoTests/Pods-JJWhiteDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5F28F4AF5B5E4FB0B3E48A45 /* libPods-JJWhiteDemoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JJWhiteDemoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -389,6 +390,7 @@
 		C3D71D042243692200CE2E4D /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				241763CB224483B1000ED24D /* Enumeration.h */,
 				C3D71D1322436A9500CE2E4D /* Constants.h */,
 				C3B8FE7E223217A20050312F /* AppDelegate.h */,
 				C3B8FE7F223217A20050312F /* AppDelegate.m */,
@@ -940,7 +942,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ED7MB6N8JF;
+				DEVELOPMENT_TEAM = K47WWL4342;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -969,7 +971,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ED7MB6N8JF;
+				DEVELOPMENT_TEAM = K47WWL4342;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

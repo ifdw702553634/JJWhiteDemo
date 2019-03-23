@@ -79,9 +79,9 @@
         NSString *uid = @"";
         //此处先设置假的uid
         if ([account isEqualToString:@"away"]) {
-            uid = @"1";
+            uid = @"261";
         }else if ([account isEqualToString:@"mude"]) {
-            uid = @"2";
+            uid = @"262";
         }else {
             uid = @"1";
         }
