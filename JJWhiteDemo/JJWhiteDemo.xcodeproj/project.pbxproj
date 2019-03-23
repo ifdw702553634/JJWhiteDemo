@@ -27,6 +27,8 @@
 		C3689BC62237B5710069DC5B /* ColorTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3689BC42237B5710069DC5B /* ColorTableViewCell.m */; };
 		C3689BC72237B5710069DC5B /* ColorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3689BC52237B5710069DC5B /* ColorTableViewCell.xib */; };
 		C36FA7A2223F301200911170 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C36FA7A1223F301200911170 /* libc++.tbd */; };
+		C3A7ED752245E01400378CDA /* RightAudienceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3A7ED732245E01400378CDA /* RightAudienceTableViewCell.m */; };
+		C3A7ED762245E01400378CDA /* RightAudienceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3A7ED742245E01400378CDA /* RightAudienceTableViewCell.xib */; };
 		C3B83E3B223B3A28003E9443 /* LiveTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C3B83E3A223B3A28003E9443 /* LiveTableView.m */; };
 		C3B83E3D223B3A36003E9443 /* LiveTableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3B83E3C223B3A36003E9443 /* LiveTableView.xib */; };
 		C3B83E41223B3B23003E9443 /* LiveTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3B83E3F223B3B23003E9443 /* LiveTableViewCell.m */; };
@@ -44,8 +46,8 @@
 		C3D71CF222431CD700CE2E4D /* AgoraRtm.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71CEE22431CD700CE2E4D /* AgoraRtm.m */; };
 		C3D71CF522432FCC00CE2E4D /* RightView.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71CF422432FCC00CE2E4D /* RightView.m */; };
 		C3D71CF722432FF300CE2E4D /* RightView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3D71CF622432FF300CE2E4D /* RightView.xib */; };
-		C3D71CFB2243396F00CE2E4D /* RightTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71CF92243396F00CE2E4D /* RightTableViewCell.m */; };
-		C3D71CFC2243396F00CE2E4D /* RightTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3D71CFA2243396F00CE2E4D /* RightTableViewCell.xib */; };
+		C3D71CFB2243396F00CE2E4D /* RightMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71CF92243396F00CE2E4D /* RightMessageTableViewCell.m */; };
+		C3D71CFC2243396F00CE2E4D /* RightMessageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3D71CFA2243396F00CE2E4D /* RightMessageTableViewCell.xib */; };
 		C3D71D002243687B00CE2E4D /* UIAlertController+AutoHide.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71CFF2243687B00CE2E4D /* UIAlertController+AutoHide.m */; };
 		C3D71D052243698D00CE2E4D /* AgoraRtmKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000B22421ACC00CEFA26 /* AgoraRtmKit.framework */; };
 		C3D71D0D22436A1800CE2E4D /* AppUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D71D0922436A1700CE2E4D /* AppUtils.m */; };
@@ -120,6 +122,9 @@
 		C3689BC42237B5710069DC5B /* ColorTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColorTableViewCell.m; sourceTree = "<group>"; };
 		C3689BC52237B5710069DC5B /* ColorTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColorTableViewCell.xib; sourceTree = "<group>"; };
 		C36FA7A1223F301200911170 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		C3A7ED722245E01400378CDA /* RightAudienceTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightAudienceTableViewCell.h; sourceTree = "<group>"; };
+		C3A7ED732245E01400378CDA /* RightAudienceTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightAudienceTableViewCell.m; sourceTree = "<group>"; };
+		C3A7ED742245E01400378CDA /* RightAudienceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightAudienceTableViewCell.xib; sourceTree = "<group>"; };
 		C3B83E39223B3A28003E9443 /* LiveTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveTableView.h; sourceTree = "<group>"; };
 		C3B83E3A223B3A28003E9443 /* LiveTableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveTableView.m; sourceTree = "<group>"; };
 		C3B83E3C223B3A36003E9443 /* LiveTableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LiveTableView.xib; sourceTree = "<group>"; };
@@ -153,9 +158,9 @@
 		C3D71CF322432FCC00CE2E4D /* RightView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightView.h; sourceTree = "<group>"; };
 		C3D71CF422432FCC00CE2E4D /* RightView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightView.m; sourceTree = "<group>"; };
 		C3D71CF622432FF300CE2E4D /* RightView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightView.xib; sourceTree = "<group>"; };
-		C3D71CF82243396F00CE2E4D /* RightTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightTableViewCell.h; sourceTree = "<group>"; };
-		C3D71CF92243396F00CE2E4D /* RightTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightTableViewCell.m; sourceTree = "<group>"; };
-		C3D71CFA2243396F00CE2E4D /* RightTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightTableViewCell.xib; sourceTree = "<group>"; };
+		C3D71CF82243396F00CE2E4D /* RightMessageTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightMessageTableViewCell.h; sourceTree = "<group>"; };
+		C3D71CF92243396F00CE2E4D /* RightMessageTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightMessageTableViewCell.m; sourceTree = "<group>"; };
+		C3D71CFA2243396F00CE2E4D /* RightMessageTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightMessageTableViewCell.xib; sourceTree = "<group>"; };
 		C3D71CFE2243687B00CE2E4D /* UIAlertController+AutoHide.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+AutoHide.h"; sourceTree = "<group>"; };
 		C3D71CFF2243687B00CE2E4D /* UIAlertController+AutoHide.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+AutoHide.m"; sourceTree = "<group>"; };
 		C3D71D0922436A1700CE2E4D /* AppUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppUtils.m; sourceTree = "<group>"; };
@@ -470,9 +475,12 @@
 				C3D71CF322432FCC00CE2E4D /* RightView.h */,
 				C3D71CF422432FCC00CE2E4D /* RightView.m */,
 				C3D71CF622432FF300CE2E4D /* RightView.xib */,
-				C3D71CF82243396F00CE2E4D /* RightTableViewCell.h */,
-				C3D71CF92243396F00CE2E4D /* RightTableViewCell.m */,
-				C3D71CFA2243396F00CE2E4D /* RightTableViewCell.xib */,
+				C3D71CF82243396F00CE2E4D /* RightMessageTableViewCell.h */,
+				C3D71CF92243396F00CE2E4D /* RightMessageTableViewCell.m */,
+				C3D71CFA2243396F00CE2E4D /* RightMessageTableViewCell.xib */,
+				C3A7ED722245E01400378CDA /* RightAudienceTableViewCell.h */,
+				C3A7ED732245E01400378CDA /* RightAudienceTableViewCell.m */,
+				C3A7ED742245E01400378CDA /* RightAudienceTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -629,10 +637,11 @@
 			files = (
 				C3689BB72237A8130069DC5B /* ToolSelectView.xib in Resources */,
 				C3D71CF722432FF300CE2E4D /* RightView.xib in Resources */,
-				C3D71CFC2243396F00CE2E4D /* RightTableViewCell.xib in Resources */,
+				C3D71CFC2243396F00CE2E4D /* RightMessageTableViewCell.xib in Resources */,
 				C3689BC72237B5710069DC5B /* ColorTableViewCell.xib in Resources */,
 				C3DCB8CB22374E8B00DF4B3C /* WhiteSettingTableViewCell.xib in Resources */,
 				C3DCB8D02237532E00DF4B3C /* LiveRoomView.xib in Resources */,
+				C3A7ED762245E01400378CDA /* RightAudienceTableViewCell.xib in Resources */,
 				C3DCB8C422374D5C00DF4B3C /* WhiteSettingViewController.xib in Resources */,
 				C3B83E3D223B3A36003E9443 /* LiveTableView.xib in Resources */,
 				C3B83E42223B3B23003E9443 /* LiveTableViewCell.xib in Resources */,
@@ -711,12 +720,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-JJWhiteDemo/Pods-JJWhiteDemo-resources.sh",
+				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/White-SDK-iOS/WhiteSDK.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WhiteSDK.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -757,7 +768,7 @@
 				C34800152242244400CEFA26 /* HandlerBusiness.m in Sources */,
 				C3B83E41223B3B23003E9443 /* LiveTableViewCell.m in Sources */,
 				C3B8FE83223217A20050312F /* ViewController.m in Sources */,
-				C3D71CFB2243396F00CE2E4D /* RightTableViewCell.m in Sources */,
+				C3D71CFB2243396F00CE2E4D /* RightMessageTableViewCell.m in Sources */,
 				C3DCB8CE2237532000DF4B3C /* LiveRoomView.m in Sources */,
 				C3689BAF22379B510069DC5B /* WhiteBaseViewController.m in Sources */,
 				C3D71D0D22436A1800CE2E4D /* AppUtils.m in Sources */,
@@ -784,6 +795,7 @@
 				C3D71D002243687B00CE2E4D /* UIAlertController+AutoHide.m in Sources */,
 				C3B8FEB72232188B0050312F /* CommandListController.m in Sources */,
 				C3DCB8D8223757BE00DF4B3C /* KeyCenter.m in Sources */,
+				C3A7ED752245E01400378CDA /* RightAudienceTableViewCell.m in Sources */,
 				C3B8FEB62232188B0050312F /* WhiteRoomViewController.m in Sources */,
 				C3D71CF222431CD700CE2E4D /* AgoraRtm.m in Sources */,
 				C3689BC22237B5000069DC5B /* ColorTableViewController.m in Sources */,
@@ -942,7 +954,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = K47WWL4342;
+				DEVELOPMENT_TEAM = ED7MB6N8JF;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -971,7 +983,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = K47WWL4342;
+				DEVELOPMENT_TEAM = ED7MB6N8JF;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

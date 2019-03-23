@@ -1,5 +1,5 @@
 //
-//  RightTableViewCell.h
+//  RightMessageTableViewCell.h
 //  JJWhiteDemo
 //
 //  Created by mude on 2019/3/21.
@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RightTableViewCell : UITableViewCell
+@interface RightMessageTableViewCell : UITableViewCell
 @property (nonatomic, copy) Message *message;
 @end
 

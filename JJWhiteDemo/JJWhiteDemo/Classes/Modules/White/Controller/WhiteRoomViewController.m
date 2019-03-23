@@ -24,12 +24,18 @@
 #import "SendMessageModel.h"
 
 
-@interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate,WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate,AgoraRtcEngineDelegate,UITextFieldDelegate,AgoraRtmDelegate>
+@interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate,WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate,AgoraRtcEngineDelegate,UITextFieldDelegate,AgoraRtmDelegate>{
+}
 @property (nonatomic, strong) WhiteSDK *sdk;
 @property (nonatomic, assign, getter=isReconnecting) BOOL reconnecting;
 @property (nonatomic, strong) ToolSelectView *toolSelectView;
-
 @property (nonatomic, strong) MBProgressHUD *progressHUD;
+
+//观众相关,分页
+@property (nonatomic, assign) NSInteger page;
+@property (nonatomic, assign) NSInteger pageSize;
+@property (nonatomic, strong) NSMutableArray *stuList;
+
 
 //视频相关
 @property (nonatomic, strong) LiveTableView *liveTableView;
@@ -39,6 +45,7 @@
 @property (nonatomic, strong) UIButton *videoButton;
 @property (nonatomic, strong) UIButton *handButton;
 @property (nonatomic, strong) UIButton *chatButton;//右上角聊天
+@property (nonatomic, strong) UIButton *peerButton;//右上角人员按钮
 
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
 @property (assign, nonatomic) BOOL isBroadcaster;//是否主播模式
@@ -142,9 +149,28 @@ static NSInteger streamID = 0;
     [self.chatButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuideBottom);
         make.right.equalTo(self.view).offset(0);
-        make.left.equalTo(self.boardView.mas_right).offset(0);
+        if (self.isTeacher == AgoraClientRoleBroadcaster) {
+            make.width.offset(75);
+        }else {
+            make.width.offset(150);
+        }
         make.height.offset(50);
     }];
+    
+    //peerButton 只有主播模式可以看到
+    if (_isTeacher == AgoraClientRoleBroadcaster) {
+        _peerButton = [[UIButton alloc] init];
+        [_peerButton setImage:[UIImage imageNamed:@"btn_student"] forState:UIControlStateNormal];
+        [_peerButton addTarget:self action:@selector(doPeerPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [_peerButton setBackgroundColor:[UIColor whiteColor]];
+        [self.view addSubview:_peerButton];
+        [self.peerButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.mas_topLayoutGuideBottom);
+            make.right.equalTo(self.chatButton.mas_left).offset(0);
+            make.left.equalTo(self.boardView.mas_right).offset(0);
+            make.height.offset(50);
+        }];
+    }
     
     self.liveTableView = [[NSBundle mainBundle] loadNibNamed:@"LiveTableView" owner:nil options:nil][0];
     //传入teacherid
@@ -234,6 +260,7 @@ static NSInteger streamID = 0;
         make.width.height.offset(44);
     }];
     
+    //只有观众模式才有举手按钮
     if (_isTeacher == AgoraClientRoleAudience) {
         //handButton
         _handButton = [[UIButton alloc] init];
@@ -263,8 +290,13 @@ static NSInteger streamID = 0;
     
     
     _rightView = [[NSBundle mainBundle] loadNibNamed:@"RightView" owner:nil options:nil][0];
-    _rightView.teacherName = _mode.name;
     [self.view addSubview:_rightView];
+    _rightView.refreshBlock = ^(RefreshType type) {
+        [weakSelf loadAudienceList:type];
+    };
+    _rightView.audienceClickBlock = ^(NSDictionary * _Nonnull stuInfo) {
+        [weakSelf optionWithAudienceId:[stuInfo[@"id"] integerValue]];
+    };
     [_rightView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuideBottom);
         make.bottom.equalTo(self.mas_bottomLayoutGuideTop);
@@ -272,6 +304,59 @@ static NSInteger streamID = 0;
         make.width.height.offset(200);
     }];
     [self.view bringSubviewToFront:_progressHUD];
+}
+
+- (void)optionWithAudienceId:(NSInteger)uid {
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    alertVC.popoverPresentationController.sourceView = _rightView;
+    alertVC.popoverPresentationController.sourceRect = _rightView.bounds;
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"拉上麦序" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        SendMessageModel *msgModel = [[SendMessageModel alloc] init];
+        msgModel.type = MessageTypeOnSpeak;
+        msgModel.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
+        msgModel.toUser = uid;
+        msgModel.msg = @"拉上麦序";
+        msgModel.time = [AppUtils getCurrentTimes];
+        [self sendMessageWithPeer:[NSString stringWithFormat:@"%ld",(long)uid] model:msgModel];
+    }]];
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alertVC animated:YES completion:nil];
+}
+
+- (void)loadAudienceList:(RefreshType)type {
+    _pageSize = 15;
+    if (type == RefreshTypeRefresh) {
+        _page = 1;
+    }
+    [HandlerBusiness JJGetServiceWithApicode:ApiCodeGetChannelUser Parameters:@{@"cname":self.roomName,@"page":@(_page),@"pageSize":@(_pageSize)} Success:^(id data, id msg) {
+        NSArray *arr = data[@"Data"];
+        if (type == RefreshTypeRefresh) {
+            self.stuList = [arr mutableCopy];
+            [self.rightView.tableView.mj_header endRefreshing];
+            if ([data[@"LastPage"] boolValue] == YES) {
+                [self.rightView.tableView.mj_footer endRefreshingWithNoMoreData];
+            }else {
+                [self.rightView.tableView.mj_footer resetNoMoreData];
+                self.page ++;
+            }
+        }else {
+            if ([data[@"LastPage"] boolValue] == YES) {
+                [self.rightView.tableView.mj_footer endRefreshingWithNoMoreData];
+            }else {
+                self.page ++;
+                [self.rightView.tableView reloadData];
+                [self.rightView.tableView.mj_footer endRefreshing];
+            }
+            [self.stuList addObjectsFromArray:arr];
+        }
+        self.rightView.stuList = self.stuList;
+        DBG(@"%@", data);
+    } Failed:^(NSString *error, NSString *errorDescription) {
+        [self.rightView.tableView.mj_header endRefreshing];
+        [self.rightView.tableView.mj_footer endRefreshingWithNoMoreData];
+        DBG(@"api fail %@",error);
+    } Complete:^{
+    }];
 }
 
 - (BOOL)isBroadcaster {
@@ -769,7 +854,9 @@ static NSInteger streamID = 0;
             [self setAlert:[NSString stringWithFormat:@"Join channel failed: %d", code]];
         });
     }
-
+    _rightView.tableType = 2;//默认设置为2
+    //获取观众列表
+    [self loadAudienceList:RefreshTypeRefresh];
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
@@ -843,6 +930,21 @@ static NSInteger streamID = 0;
 
 - (void)doChatPressed:(UIButton *)sender {
     NSLog(@"chat click");
+    _rightView.tableType = 1;//消息列表
+    [UIView animateWithDuration:0.2f animations:^{
+        [self.rightView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.view.mas_right).offset(-200);
+        }];
+        self.maskView.alpha = 1.f;
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (void)doPeerPressed:(UIButton *)sender {
+    NSLog(@"Peer click");
+    _rightView.tableType = 2;//观众列表
     [UIView animateWithDuration:0.2f animations:^{
         [self.rightView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.view.mas_right).offset(-200);
@@ -889,7 +991,7 @@ static NSInteger streamID = 0;
     if (model.type == MessageTypeOnSpeak || model.type == MessageTypeOffSpeak
         || model.type == MessageTypeHand || model.type == MessageTypeMessage) {
         [self.list addObject:msg];
-        self.rightView.list = [self.list mutableCopy];
+        self.rightView.msgList = [self.list mutableCopy];
     }
 }
 

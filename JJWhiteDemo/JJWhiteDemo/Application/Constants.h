@@ -18,7 +18,7 @@
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 
-#define THEME_COLOR Rgb2UIColor(26, 169, 169, 1)
+#define THEME_COLOR Rgb2UIColor(237, 86, 86, 1)
 //#define BG_COLOR Rgb2UIColor(248, 248, 248, 1)
 #define SPECIAL_BG_COLOR Rgb2UIColor(44, 251, 205, 0.1)
 #define BG_COLOR Rgb2UIColor(248, 248, 248, 1) //背景色

@@ -1,22 +1,22 @@
 //
-//  RightTableViewCell.m
+//  RightMessageTableViewCell.m
 //  JJWhiteDemo
 //
 //  Created by mude on 2019/3/21.
 //  Copyright © 2019 mude. All rights reserved.
 //
 
-#import "RightTableViewCell.h"
+#import "RightMessageTableViewCell.h"
 #import "SendMessageModel.h"
 
-@interface RightTableViewCell()
+@interface RightMessageTableViewCell()
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
 
 @end
 
-@implementation RightTableViewCell
+@implementation RightMessageTableViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

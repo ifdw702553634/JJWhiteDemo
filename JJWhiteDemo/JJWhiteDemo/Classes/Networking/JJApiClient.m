@@ -7,6 +7,7 @@
 //*---------------------- http:// -----------------*/
 
 NSString *const ApiCodeGetClassRoom    = @"/getClassRoom";
+NSString *const ApiCodeGetChannelUser  = @"/getChannelUser";
 
 /**
  *  接口apicode和Model映射关系

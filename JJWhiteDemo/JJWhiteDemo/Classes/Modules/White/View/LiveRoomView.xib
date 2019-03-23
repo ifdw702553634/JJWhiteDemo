@@ -54,6 +54,6 @@
         </view>
     </objects>
     <resources>
-        <image name="btn_close" width="30" height="30"/>
+        <image name="btn_close" width="120" height="120"/>
     </resources>
 </document>

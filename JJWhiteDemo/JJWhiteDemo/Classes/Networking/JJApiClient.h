@@ -6,6 +6,7 @@
 /*----------------------url地址-------------------*/
 
 extern NSString *const ApiCodeGetClassRoom;
+extern NSString *const ApiCodeGetChannelUser;
 
 
 +(NSDictionary *)mapModel;

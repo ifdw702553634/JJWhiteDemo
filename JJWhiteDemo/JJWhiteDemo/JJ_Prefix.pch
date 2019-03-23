@@ -16,4 +16,6 @@
 #import "AppUtils.h"
 #import "BaseViewController.h"
 #import "Enumeration.h"
+#import "MJRefresh.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 #endif /* JJ_Prefix_pch */

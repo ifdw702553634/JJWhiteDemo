@@ -13,6 +13,8 @@ target 'JJWhiteDemo' do
   pod 'MBProgressHUD'
   pod 'YYModel'
   pod 'AFNetworking'
+  pod 'MJRefresh'
+  pod 'SDWebImage'
   target 'JJWhiteDemoTests' do
     inherit! :search_paths
     # Pods for testing
