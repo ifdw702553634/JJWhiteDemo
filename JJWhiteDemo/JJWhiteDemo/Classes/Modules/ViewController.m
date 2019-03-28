@@ -82,6 +82,10 @@
             uid = @"261";
         }else if ([account isEqualToString:@"mude"]) {
             uid = @"262";
+        }else if ([account isEqualToString:@"b1"]) {
+            uid = @"1";
+        }else if ([account isEqualToString:@"b2"]) {
+            uid = @"2";
         }else {
             uid = @"1";
         }

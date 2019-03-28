@@ -56,9 +56,19 @@ typedef NS_ENUM(NSInteger, MessageType) {
     //关闭发言（踢出麦序）
     MessageTypeOffSpeak = 8,
     //课程结束
-    MessageTypeOver = 9
+    MessageTypeOver = 9,
+    //消息已读
+    MessageTypeRead = 10
 };
 
+
+//消息已读未读状态
+typedef NS_ENUM(NSInteger, MessageReadStatus) {
+    //未读
+    MessageReadStatusUnread = 0,
+    //已读
+    MessageReadStatusRead
+};
 
 
 #endif /* Enumeration_h */

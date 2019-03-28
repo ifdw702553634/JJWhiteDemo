@@ -11,4 +11,6 @@
 @interface Message : NSObject
 @property (nonatomic, copy) NSString *userId;
 @property (nonatomic, copy) NSString *text;
+
+@property (nonatomic, assign) MessageReadStatus status;//消息查阅状态
 @end

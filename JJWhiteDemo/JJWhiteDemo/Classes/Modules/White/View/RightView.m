@@ -37,6 +37,8 @@ static NSString *kRightAudienceTableViewCell = @"RightAudienceTableViewCell";
 - (MJRefreshNormalHeader *)header {
     if (!_header) {
         _header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+        _header.lastUpdatedTimeLabel.hidden = YES;
+        _header.stateLabel.hidden = YES;
     }
     return _header;
 }
@@ -59,7 +61,7 @@ static NSString *kRightAudienceTableViewCell = @"RightAudienceTableViewCell";
         _tableView.mj_header = self.header;
         // 设置footer
         _tableView.mj_footer = self.footer;
-        [self.tableView reloadData];
+        [self loadData];
     }else {
         if (_msgList.count > 0) {
             NSIndexPath *end = [NSIndexPath indexPathForRow:_msgList.count - 1 inSection:0];
@@ -141,11 +143,10 @@ static NSString *kRightAudienceTableViewCell = @"RightAudienceTableViewCell";
         return cell;
     }else {
         RightAudienceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kRightAudienceTableViewCell forIndexPath:indexPath];
-        cell.audienceName.text = self.stuList[indexPath.row][@"studentName"];
+        cell.audienceName.text = self.stuList[indexPath.row][@"weixinName"];
         [cell.headImageView sd_setImageWithURL:self.stuList[indexPath.row][@"avatar"]];
         return cell;
     }
-    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

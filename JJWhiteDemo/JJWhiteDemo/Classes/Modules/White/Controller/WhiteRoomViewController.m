@@ -48,14 +48,18 @@
 @property (nonatomic, strong) UIButton *peerButton;//右上角人员按钮
 
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
+@property (nonatomic, assign) AgoraClientRole isTeacher;//是否是老师，用于辨别唯一
+@property (strong, nonatomic) NSMutableArray<VideoSession *> *videoSessions;
+@property (strong, nonatomic) VideoSession *fullSession;
+
+//判断项
 @property (assign, nonatomic) BOOL isBroadcaster;//是否主播模式
 @property (assign, nonatomic) BOOL isAudio;//语音是否开启
 @property (assign, nonatomic) BOOL isVideo;//视频是否开启
 @property (assign, nonatomic) BOOL isPencil;//是否允许手写
-@property (nonatomic, assign) AgoraClientRole isTeacher;//是否是老师，用于辨别唯一
+@property (assign, nonatomic) BOOL isChat;//是否打开聊天框
+@property (assign, nonatomic) BOOL isHand;//是否举手，举手状态下不可继续举手
 
-@property (strong, nonatomic) NSMutableArray<VideoSession *> *videoSessions;
-@property (strong, nonatomic) VideoSession *fullSession;
 
 //信令
 @property (nonatomic, strong) UITextField *txtField;
@@ -145,6 +149,7 @@ static NSInteger streamID = 0;
     [_chatButton setImage:[UIImage imageNamed:@"btn_chat"] forState:UIControlStateNormal];
     [_chatButton addTarget:self action:@selector(doChatPressed:) forControlEvents:UIControlEventTouchUpInside];
     [_chatButton setBackgroundColor:[UIColor whiteColor]];
+    _chatButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:_chatButton];
     [self.chatButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuideBottom);
@@ -163,6 +168,7 @@ static NSInteger streamID = 0;
         [_peerButton setImage:[UIImage imageNamed:@"btn_student"] forState:UIControlStateNormal];
         [_peerButton addTarget:self action:@selector(doPeerPressed:) forControlEvents:UIControlEventTouchUpInside];
         [_peerButton setBackgroundColor:[UIColor whiteColor]];
+        _peerButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
         [self.view addSubview:_peerButton];
         [self.peerButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.mas_topLayoutGuideBottom);
@@ -174,7 +180,7 @@ static NSInteger streamID = 0;
     
     self.liveTableView = [[NSBundle mainBundle] loadNibNamed:@"LiveTableView" owner:nil options:nil][0];
     //传入teacherid
-    self.liveTableView.teacherId = [self.mode.name integerValue];
+    self.liveTableView.teacherId = self.mode.peerId;
     [self.view addSubview:_liveTableView];
     [_liveTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.chatButton.mas_bottom).offset(0);
@@ -236,32 +242,34 @@ static NSInteger streamID = 0;
         make.width.height.offset(44);
     }];
     
-    //videoButton
-    _videoButton = [[UIButton alloc] init];
-    [_videoButton setImage:[UIImage imageNamed:@"btn_video_on"] forState:UIControlStateNormal];
-    [_videoButton addTarget:self action:@selector(doVideoPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.boardView addSubview:_videoButton];
-    [self.videoButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(-2);
-        make.left.equalTo(self.audioMuteButton.mas_right).offset(2);
-        make.width.height.offset(44);
-    }];
+    //videoButton  听众不显示开关摄像头按钮
+    if (_isTeacher == AgoraClientRoleBroadcaster) {
+        _videoButton = [[UIButton alloc] init];
+        [_videoButton setImage:[UIImage imageNamed:@"btn_video_on"] forState:UIControlStateNormal];
+        [_videoButton addTarget:self action:@selector(doVideoPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.boardView addSubview:_videoButton];
+        [self.videoButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.view).offset(-2);
+            make.left.equalTo(self.audioMuteButton.mas_right).offset(2);
+            make.width.height.offset(44);
+        }];
+    }
     
-    //发消息相关
-    _txtField = [[UITextField alloc] init];
-    _txtField.delegate = self;
-    _txtField.placeholder = @"发送消息请输入...";
-    _txtField.returnKeyType = UIReturnKeySend;
-    [self.boardView addSubview:_txtField];
-    [_txtField mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(-2);
-        make.left.equalTo(self.videoButton.mas_right).offset(20);
-        make.right.equalTo(self.boardView).offset(50);
-        make.width.height.offset(44);
-    }];
     
-    //只有观众模式才有举手按钮
+    //只有观众模式才有举手按钮以及消息输入框
     if (_isTeacher == AgoraClientRoleAudience) {
+        //发消息相关  ###暂时不需要发消息
+//        _txtField = [[UITextField alloc] init];
+//        _txtField.delegate = self;
+//        _txtField.placeholder = @"发送消息请输入...";
+//        _txtField.returnKeyType = UIReturnKeySend;
+//        [self.boardView addSubview:_txtField];
+//        [_txtField mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.bottom.equalTo(self.view).offset(-2);
+//            make.left.equalTo(self.videoButton.mas_right).offset(20);
+//            make.right.equalTo(self.boardView).offset(50);
+//            make.width.height.offset(44);
+//        }];
         //handButton
         _handButton = [[UIButton alloc] init];
         [_handButton setImage:[UIImage imageNamed:@"btn_hand"] forState:UIControlStateNormal];
@@ -269,7 +277,7 @@ static NSInteger streamID = 0;
         [self.boardView addSubview:_handButton];
         [self.handButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.view).offset(-2);
-            make.left.equalTo(self.txtField.mas_right).offset(2);
+//            make.left.equalTo(self.txtField.mas_right).offset(2);
             make.right.equalTo(self.boardView).offset(-2);
             make.width.height.offset(44);
         }];
@@ -310,7 +318,9 @@ static NSInteger streamID = 0;
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     alertVC.popoverPresentationController.sourceView = _rightView;
     alertVC.popoverPresentationController.sourceRect = _rightView.bounds;
-    [alertVC addAction:[UIAlertAction actionWithTitle:@"拉上麦序" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertVC addAction:[UIAlertAction actionWithTitle:@"发言" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //点击发言后，隐藏侧边栏
+        [self hideRightView:nil];
         SendMessageModel *msgModel = [[SendMessageModel alloc] init];
         msgModel.type = MessageTypeOnSpeak;
         msgModel.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
@@ -352,6 +362,11 @@ static NSInteger streamID = 0;
         self.rightView.stuList = self.stuList;
         DBG(@"%@", data);
     } Failed:^(NSString *error, NSString *errorDescription) {
+        //下拉刷新，判断没有学生的时候清空数组
+        if (type == RefreshTypeRefresh && [error isEqualToString:@"没有学生信息了！"]) {
+            self.stuList = [@[] mutableCopy];
+            self.rightView.stuList = self.stuList;
+        }
         [self.rightView.tableView.mj_header endRefreshing];
         [self.rightView.tableView.mj_footer endRefreshingWithNoMoreData];
         DBG(@"api fail %@",error);
@@ -381,17 +396,20 @@ static NSInteger streamID = 0;
             SendMessageModel *model = [[SendMessageModel alloc] init];
             model.type = isAudio ? MessageTypeCloseAudio : MessageTypeOpenAudio;
             model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
-            model.toUser = [self.mode.name integerValue];
+            model.toUser = self.mode.peerId;
             model.msg = isAudio ? @"关闭麦克风" : @"打开麦克风";
             model.time = [AppUtils getCurrentTimes];
-            [self sendMessageWithPeer:self.mode.name model:model];
+            [self sendMessageWithPeer:[NSString stringWithFormat:@"%ld",(long)self.mode.peerId] model:model];
         }
     });
 }
 
 - (void)setIsPencil:(BOOL)isPencil {
     _isPencil = isPencil;
-    [self.room setViewMode:isPencil ? WhiteViewModeFollower : WhiteViewModeBroadcaster];
+    //老师则设置白板模式
+    if (self.isTeacher == AgoraClientRoleBroadcaster) {
+        [self.room setViewMode:isPencil ? WhiteViewModeFollower : WhiteViewModeBroadcaster];
+    }
     [self.room disableOperations:isPencil];
     //通知主线程刷新
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -401,10 +419,10 @@ static NSInteger streamID = 0;
             SendMessageModel *model = [[SendMessageModel alloc] init];
             model.type = isPencil ? MessageTypeClosePencil : MessageTypeOpenPencil;
             model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
-            model.toUser = [self.mode.name integerValue];
+            model.toUser = self.mode.peerId;
             model.msg = isPencil ? @"关闭手写笔" : @"打开手写笔";
             model.time = [AppUtils getCurrentTimes];
-            [self sendMessageWithPeer:self.mode.name model:model];
+            [self sendMessageWithPeer:[NSString stringWithFormat:@"%ld",(long)self.mode.peerId] model:model];
         }
     });
 }
@@ -419,6 +437,28 @@ static NSInteger streamID = 0;
         [self.videoButton setImage:[UIImage imageNamed:(isVideo ? @"btn_video_off" : @"btn_video_on")] forState:UIControlStateNormal];
         //回调或者说是通知主线程刷新，
     });
+}
+
+- (void)setIsHand:(BOOL)isHand {
+    _isHand = isHand;
+    //举手
+    if (isHand == YES) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.handButton setImage:[UIImage imageNamed:@"btn_hand_on"] forState:UIControlStateNormal];
+        });
+        //变为举手状态，举手状态不可重复举手，只有老师端已读才可继续举手
+        SendMessageModel *model = [[SendMessageModel alloc] init];
+        model.type = MessageTypeHand;
+        model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
+        model.toUser = self.mode.peerId;
+        model.msg = @"举手";
+        model.time = [AppUtils getCurrentTimes];
+        [self sendMessageWithPeer:[NSString stringWithFormat:@"%ld",(long)self.mode.peerId] model:model];
+    }else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.handButton setImage:[UIImage imageNamed:@"btn_hand"] forState:UIControlStateNormal];
+        });
+    }
 }
 
 - (void)setVideoSessions:(NSMutableArray<VideoSession *> *)videoSessions {
@@ -854,9 +894,11 @@ static NSInteger streamID = 0;
             [self setAlert:[NSString stringWithFormat:@"Join channel failed: %d", code]];
         });
     }
-    _rightView.tableType = 2;//默认设置为2
-    //获取观众列表
-    [self loadAudienceList:RefreshTypeRefresh];
+    if (_isTeacher == AgoraClientRoleBroadcaster) {
+        _rightView.tableType = 2;//默认设置为2
+        //获取观众列表
+        [self loadAudienceList:RefreshTypeRefresh];
+    }
 }
 
 - (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
@@ -917,20 +959,36 @@ static NSInteger streamID = 0;
     self.isVideo = !self.isVideo;
 }
 
+//学生举手按钮点击事件
 - (void)doHandPressed:(UIButton *)sender {
-    NSLog(@"hand click");
-    SendMessageModel *model = [[SendMessageModel alloc] init];
-    model.type = MessageTypeHand;
-    model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
-    model.toUser = [self.mode.name integerValue];
-    model.msg = @"举手";
-    model.time = [AppUtils getCurrentTimes];
-    [self sendMessageWithPeer:self.mode.name model:model];
+    if (!_isHand) {
+        self.isHand = YES;
+    }
 }
 
 - (void)doChatPressed:(UIButton *)sender {
     NSLog(@"chat click");
+    _isChat = YES;//设置为聊天
     _rightView.tableType = 1;//消息列表
+    
+    //消息标记为已读
+    for (Message *msg in self.list) {
+        //发送消息高速举手用户消息已读
+        if (msg.status == MessageReadStatusUnread) {
+            msg.status = MessageReadStatusRead;
+            SendMessageModel *model = [[SendMessageModel alloc] init];
+            model.type = MessageTypeRead;
+            model.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
+            model.toUser = [msg.userId integerValue];
+            model.msg = @"消息已读";
+            model.time = [AppUtils getCurrentTimes];
+            [self sendMessageWithPeer:[NSString stringWithFormat:@"%@",msg.userId] model:model];
+        }
+    }
+    self.rightView.msgList = [_list mutableCopy];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.chatButton setImage:[UIImage imageNamed:@"btn_chat"] forState:UIControlStateNormal];
+    });
     [UIView animateWithDuration:0.2f animations:^{
         [self.rightView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.view.mas_right).offset(-200);
@@ -957,6 +1015,7 @@ static NSInteger streamID = 0;
 }
 
 - (void)hideRightView:(id)sender {
+    _isChat = NO;//设置为非聊天
     NSLog(@"hide view");
     [UIView animateWithDuration:0.2f animations:^{
         [self.rightView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -987,19 +1046,40 @@ static NSInteger streamID = 0;
     msg.userId = user;
     msg.text = text;
     SendMessageModel *model = [SendMessageModel yy_modelWithJSON:text];
-    //部分信息需要显示在聊天屏上
-    if (model.type == MessageTypeOnSpeak || model.type == MessageTypeOffSpeak
-        || model.type == MessageTypeHand || model.type == MessageTypeMessage) {
+    //部分信息需要显示在聊天屏上 TODO
+    //暂时只显示举手信息
+    if (model.type == MessageTypeHand) {
+        if ([user integerValue] != [[UserDefaultsUtils valueWithKey:@"uid"] integerValue]) {
+            if (_isChat == NO) {
+                msg.status = MessageReadStatusUnread;//标记为未读
+                //通知主线程刷新
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.chatButton setImage:[UIImage imageNamed:@"btn_chat_new"] forState:UIControlStateNormal];
+                });
+                
+            }else {
+                msg.status = MessageReadStatusRead;//标记为已读
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.chatButton setImage:[UIImage imageNamed:@"btn_chat"] forState:UIControlStateNormal];
+                });
+            }
+        }
         [self.list addObject:msg];
         self.rightView.msgList = [self.list mutableCopy];
     }
+//    if (model.type == MessageTypeOnSpeak || model.type == MessageTypeOffSpeak
+//        || model.type == MessageTypeHand || model.type == MessageTypeMessage
+//        || ((model.type == MessageTypeCloseAudio || model.type == MessageTypeOpenAudio
+//        || model.type == MessageTypeClosePencil || model.type == MessageTypeOpenPencil) && model.toUser != self.mode.peerId)) {
+//
+//    }
 }
 
 - (BOOL)pressedReturnToSendText:(NSString *)text {
     if (!text || text.length == 0) {
         return NO;
     }
-    NSString *name = self.mode.name;
+    NSString *name = [NSString stringWithFormat:@"%ld",(long)self.mode.peerId];
     [self sendPeer:name msg:text];
     return YES;
 }
@@ -1163,6 +1243,10 @@ static NSInteger streamID = 0;
             case MessageTypeOver:
                 [self setAlert:@"课程结束"];
                 DBG(@"*****课程结束*****");
+                break;
+            case MessageTypeRead:
+                //消息已读，取消举手状态
+                self.isHand = NO;
                 break;
             default:
                 break;

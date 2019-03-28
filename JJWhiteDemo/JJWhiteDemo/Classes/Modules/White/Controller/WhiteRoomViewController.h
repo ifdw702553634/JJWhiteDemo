@@ -11,7 +11,8 @@
 
 typedef struct  {
     ChatType type;
-    NSString *name;
+//    NSString *name;
+    NSInteger peerId;
 } ChatMode;
 
 @class WhiteRoomViewController;

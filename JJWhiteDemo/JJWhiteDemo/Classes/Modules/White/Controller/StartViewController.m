@@ -75,7 +75,8 @@
         }
         ChatMode mode;
         mode.type = ChatTypePeer;
-        mode.name = [data[@"teacher_id"] description];
+//        mode.name = [data[@"teacher_id"] description];
+        mode.peerId = [data[@"teacher_id"] integerValue];
         
         WhiteRoomViewController *vc = [[WhiteRoomViewController alloc] init];
         vc.roomUuid = self.dataDic[@"white_room_uuid"];
