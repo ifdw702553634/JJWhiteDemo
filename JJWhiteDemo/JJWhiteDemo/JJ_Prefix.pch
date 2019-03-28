@@ -18,4 +18,5 @@
 #import "Enumeration.h"
 #import "MJRefresh.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "UIView+Toast.h"
 #endif /* JJ_Prefix_pch */

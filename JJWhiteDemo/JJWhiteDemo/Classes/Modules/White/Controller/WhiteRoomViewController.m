@@ -60,7 +60,6 @@
 @property (assign, nonatomic) BOOL isChat;//是否打开聊天框
 @property (assign, nonatomic) BOOL isHand;//是否举手，举手状态下不可继续举手
 
-
 //信令
 @property (nonatomic, strong) UITextField *txtField;
 @property (nonatomic, strong) NSMutableArray *list;
@@ -144,26 +143,22 @@ static NSInteger streamID = 0;
         make.right.equalTo(self.view).offset(-150);
     }];
     
-    //右上角chat
-    _chatButton = [[UIButton alloc] init];
-    [_chatButton setImage:[UIImage imageNamed:@"btn_chat"] forState:UIControlStateNormal];
-    [_chatButton addTarget:self action:@selector(doChatPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [_chatButton setBackgroundColor:[UIColor whiteColor]];
-    _chatButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.view addSubview:_chatButton];
-    [self.chatButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mas_topLayoutGuideBottom);
-        make.right.equalTo(self.view).offset(0);
-        if (self.isTeacher == AgoraClientRoleBroadcaster) {
-            make.width.offset(75);
-        }else {
-            make.width.offset(150);
-        }
-        make.height.offset(50);
-    }];
-    
     //peerButton 只有主播模式可以看到
     if (_isTeacher == AgoraClientRoleBroadcaster) {
+        //右上角chat
+        _chatButton = [[UIButton alloc] init];
+        [_chatButton setImage:[UIImage imageNamed:@"btn_chat"] forState:UIControlStateNormal];
+        [_chatButton addTarget:self action:@selector(doChatPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [_chatButton setBackgroundColor:[UIColor whiteColor]];
+        _chatButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.view addSubview:_chatButton];
+        [self.chatButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.mas_topLayoutGuideBottom);
+            make.right.equalTo(self.view).offset(0);
+            make.width.offset(75);
+            make.height.offset(50);
+        }];
+        
         _peerButton = [[UIButton alloc] init];
         [_peerButton setImage:[UIImage imageNamed:@"btn_student"] forState:UIControlStateNormal];
         [_peerButton addTarget:self action:@selector(doPeerPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -183,7 +178,11 @@ static NSInteger streamID = 0;
     self.liveTableView.teacherId = self.mode.peerId;
     [self.view addSubview:_liveTableView];
     [_liveTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.chatButton.mas_bottom).offset(0);
+        if (self.isTeacher == AgoraClientRoleBroadcaster) {
+            make.top.equalTo(self.chatButton.mas_bottom).offset(0);
+        }else {
+            make.top.equalTo(self.mas_topLayoutGuideBottom).offset(0);
+        }
         make.bottom.equalTo(self.mas_bottomLayoutGuideTop);
         make.right.equalTo(self.view).offset(0);
         make.left.equalTo(self.boardView.mas_right).offset(0);
@@ -1256,18 +1255,19 @@ static NSInteger streamID = 0;
         switch (type) {
             case MessageTypeHand:
             {
-                UIAlertController *ac=[UIAlertController alertControllerWithTitle:ALERT_TITLE message:[NSString stringWithFormat:@"%ld举手了",(long)model.fromUser] preferredStyle:UIAlertControllerStyleAlert];
-                [ac setCancelTitle:@"忽略" SureTitle:@"上麦" cancelBlock:^(UIAlertAction * _Nullable action) {
-                } sureBlock:^(UIAlertAction * _Nullable action) {
-                    SendMessageModel *msgModel = [[SendMessageModel alloc] init];
-                    msgModel.type = MessageTypeOnSpeak;
-                    msgModel.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
-                    msgModel.toUser = model.fromUser;
-                    msgModel.msg = @"拉上麦序";
-                    msgModel.time = [AppUtils getCurrentTimes];
-                    [self sendMessageWithPeer:[NSString stringWithFormat:@"%ld",(long)model.fromUser] model:msgModel];
-                }];
-                [self presentViewController:ac animated:YES completion:nil];
+                [self.view makeToast:[NSString stringWithFormat:@"%ld举手了",(long)model.fromUser]];
+//                UIAlertController *ac=[UIAlertController alertControllerWithTitle:ALERT_TITLE message:[NSString stringWithFormat:@"%ld举手了",(long)model.fromUser] preferredStyle:UIAlertControllerStyleAlert];
+//                [ac setCancelTitle:@"忽略" SureTitle:@"上麦" cancelBlock:^(UIAlertAction * _Nullable action) {
+//                } sureBlock:^(UIAlertAction * _Nullable action) {
+//                    SendMessageModel *msgModel = [[SendMessageModel alloc] init];
+//                    msgModel.type = MessageTypeOnSpeak;
+//                    msgModel.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
+//                    msgModel.toUser = model.fromUser;
+//                    msgModel.msg = @"拉上麦序";
+//                    msgModel.time = [AppUtils getCurrentTimes];
+//                    [self sendMessageWithPeer:[NSString stringWithFormat:@"%ld",(long)model.fromUser] model:msgModel];
+//                }];
+//                [self presentViewController:ac animated:YES completion:nil];
                 break;
             }
             case MessageTypeCloseAudio:

@@ -10,6 +10,7 @@
 		25AC91C64F91001D176D14F4 /* libPods-JJWhiteDemoUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 093D3B89F404E8B2FE5D1B83 /* libPods-JJWhiteDemoUITests.a */; };
 		3C41309BA12143DC852C9442 /* libPods-JJWhiteDemoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F28F4AF5B5E4FB0B3E48A45 /* libPods-JJWhiteDemoTests.a */; };
 		8C0A4F5D6EBF7A26E36B9057 /* libPods-JJWhiteDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F42EB010A9C32ED40ED5CBD2 /* libPods-JJWhiteDemo.a */; };
+		C3434D79224CA5BD0075C385 /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = C3434D78224CA5BC0075C385 /* UIView+Toast.m */; };
 		C348000622421AA400CEFA26 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000522421AA400CEFA26 /* SystemConfiguration.framework */; };
 		C348000822421AB100CEFA26 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000722421AB100CEFA26 /* CoreTelephony.framework */; };
 		C348000A22421ABD00CEFA26 /* libresolv.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000922421ABD00CEFA26 /* libresolv.9.tbd */; };
@@ -93,6 +94,8 @@
 		822803F532748D6180683BF0 /* Pods-JJWhiteDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoUITests/Pods-JJWhiteDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
 		918443AE096E7072250B40D9 /* Pods-JJWhiteDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoTests/Pods-JJWhiteDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		924E37B431D0FB17D35ABCF2 /* Pods-JJWhiteDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoUITests/Pods-JJWhiteDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		C3434D77224CA5BC0075C385 /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Toast.h"; sourceTree = "<group>"; };
+		C3434D78224CA5BC0075C385 /* UIView+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Toast.m"; sourceTree = "<group>"; };
 		C348000322421A9700CEFA26 /* AgoraRtmKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AgoraRtmKit.framework; path = JJWhiteDemo/libs/AgoraRtmKit.framework; sourceTree = "<group>"; };
 		C348000522421AA400CEFA26 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C348000722421AB100CEFA26 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -264,6 +267,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C3434D76224CA5BC0075C385 /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				C3434D77224CA5BC0075C385 /* UIView+Toast.h */,
+				C3434D78224CA5BC0075C385 /* UIView+Toast.m */,
+			);
+			name = Toast;
+			path = ../../../../../jiaojiao/jiaojiao/jiaojiao/Classes/Extensions/Categorys/Toast;
+			sourceTree = "<group>";
+		};
 		C348000D2242244400CEFA26 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
@@ -353,6 +366,7 @@
 		C3D71CFD224367DD00CE2E4D /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				C3434D76224CA5BC0075C385 /* Toast */,
 				C3D71D1022436A2A00CE2E4D /* UIView+Extension.h */,
 				C3D71D0F22436A2A00CE2E4D /* UIView+Extension.m */,
 				C3D71CFE2243687B00CE2E4D /* UIAlertController+AutoHide.h */,
@@ -764,6 +778,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3434D79224CA5BD0075C385 /* UIView+Toast.m in Sources */,
 				C3689BAC22379B330069DC5B /* WhitePlayerViewController.m in Sources */,
 				C34800152242244400CEFA26 /* HandlerBusiness.m in Sources */,
 				C3B83E41223B3B23003E9443 /* LiveTableViewCell.m in Sources */,

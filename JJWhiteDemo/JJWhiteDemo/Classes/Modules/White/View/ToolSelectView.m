@@ -12,7 +12,7 @@
 
 static NSString *kToolSelectTableViewCell = @"ToolSelectTableViewCell";
 
-@interface ToolSelectView()<UITableViewDelegate, UITableViewDataSource>{
+@interface ToolSelectView()<UITableViewDelegate, UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate>{
     NSIndexPath *_selectIndex;//记录选中的行
     
     NSArray *_colorArray;//记录当前颜色
@@ -20,6 +20,8 @@ static NSString *kToolSelectTableViewCell = @"ToolSelectTableViewCell";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) NSArray *toolArr;
+
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
 
 @end
 
@@ -43,7 +45,7 @@ static NSString *kToolSelectTableViewCell = @"ToolSelectTableViewCell";
 }
 
 - (void)setData {
-     _toolArr = @[@"btn_cancel",@"btn_pencil",@"btn_text",@"btn_color",@"btn_eraser",@"btn_move"];
+     _toolArr = @[@"btn_cancel",@"btn_pencil",@"btn_text",@"btn_color",@"btn_eraser",@"btn_move",@"btn_addimage"];
     _selectIndex = [NSIndexPath indexPathForRow:ToolTypePencil inSection:0];
     [self.tableView reloadData];
 }
@@ -136,13 +138,46 @@ static NSString *kToolSelectTableViewCell = @"ToolSelectTableViewCell";
             [self.room setMemberState:mstate];
         }
             break;
-            
+        case ToolTypeAddImage:
+        {
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+                self.imagePicker = [[UIImagePickerController alloc]init];
+                self.imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                NSMutableArray *mediaTypes = [[NSMutableArray alloc] init];
+                [mediaTypes addObject:(__bridge NSString *)kUTTypeImage];
+                self.imagePicker.mediaTypes = mediaTypes;
+                self.imagePicker.delegate = self;
+                self.imagePicker.allowsEditing=NO;
+                [[self viewController] presentViewController:self.imagePicker
+                                       animated:YES
+                                     completion:^(void){
+                                     }];
+            }
+        }
+            break;
         default:
             break;
     }
     [tableView reloadData];
-    
 }
 
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
+    UIImage* image = [info objectForKey: @"UIImagePickerControllerOriginalImage"];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(UIViewController*)viewController
+{
+    UIResponder *nextResponder =  self;
+    do
+    {
+        nextResponder = [nextResponder nextResponder];
+        
+        if ([nextResponder isKindOfClass:[UIViewController class]])
+            return (UIViewController*)nextResponder;
+        
+    } while (nextResponder != nil);
+    return nil;
+}
 
 @end

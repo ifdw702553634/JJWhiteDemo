@@ -34,7 +34,9 @@ typedef NS_ENUM(NSInteger, ToolType) {
     //橡皮擦
     ToolTypeEraser,
     //选择工具
-    ToolTypeSelector
+    ToolTypeSelector,
+    //插入图片
+    ToolTypeAddImage
 };
 
 //左边教具栏目按钮的枚举
