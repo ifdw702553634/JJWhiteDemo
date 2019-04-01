@@ -23,8 +23,15 @@
 #import "RightView.h"
 #import "SendMessageModel.h"
 
+//录屏相关
+#import <SpriteKit/SpriteKit.h>
+#import <ReplayKit/ReplayKit.h>
+#import "VideoViewLayouter.h"
 
-@interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate,WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate,AgoraRtcEngineDelegate,UITextFieldDelegate,AgoraRtmDelegate>{
+
+static NSInteger btnH = 44;
+
+@interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate,WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate,AgoraRtcEngineDelegate,UITextFieldDelegate,AgoraRtmDelegate,RPBroadcastActivityViewControllerDelegate>{
 }
 @property (nonatomic, strong) WhiteSDK *sdk;
 @property (nonatomic, assign, getter=isReconnecting) BOOL reconnecting;
@@ -39,7 +46,7 @@
 
 //视频相关
 @property (nonatomic, strong) LiveTableView *liveTableView;
-@property (strong, nonatomic) UIButton *broadcastButton;
+@property (strong, nonatomic) UIView *broadcastButton;
 @property (strong, nonatomic) UIButton *audioMuteButton;
 @property (nonatomic, strong) UIButton *switchCameraButton;
 @property (nonatomic, strong) UIButton *videoButton;
@@ -65,6 +72,12 @@
 @property (nonatomic, strong) NSMutableArray *list;
 @property (nonatomic, strong) RightView *rightView;
 @property (nonatomic, strong) UIView *maskView;
+
+//录屏相关
+@property (weak, nonatomic) RPBroadcastActivityViewController *broadcastActivityVC;
+@property (weak, nonatomic) RPBroadcastController *broadcastController;
+@property (strong, nonatomic) UIView *cameraPreview;
+@property (strong, nonatomic) VideoViewLayouter *viewLayouter;
 
 @end
 @implementation WhiteRoomViewController
@@ -113,6 +126,8 @@ static NSInteger streamID = 0;
     NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationLandscapeLeft];
     [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
     
+    // 存储数据 供group中 使用
+    [[[NSUserDefaults alloc] initWithSuiteName:@"group.JJWhiteDemo"] setValue:@{@"uid":[UserDefaultsUtils valueWithKey:@"uid"],@"channelName":_roomName} forKey:@"shareData"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -139,7 +154,18 @@ static NSInteger streamID = 0;
     [self.view addSubview:self.boardView];
     [self.boardView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuideBottom);
-        make.left.bottom.right.equalTo(self.view).offset(50);
+        make.bottom.equalTo(self.mas_bottomLayoutGuideTop);
+        make.left.right.equalTo(self.view).offset(50);
+        make.right.equalTo(self.view).offset(-150);
+    }];
+    
+    self.cameraPreview = [[UIView alloc] init];
+    self.cameraPreview.hidden = YES;
+    [self.view addSubview:_cameraPreview];
+    [self.cameraPreview mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.mas_topLayoutGuideBottom);
+        make.bottom.equalTo(self.mas_bottomLayoutGuideTop);
+        make.left.right.equalTo(self.view).offset(50);
         make.right.equalTo(self.view).offset(-150);
     }];
     
@@ -204,21 +230,25 @@ static NSInteger streamID = 0;
         make.right.equalTo(self.boardView.mas_left).offset(0);
     }];
     
-    
-    //按钮加载boardView上
-    _broadcastButton = [[UIButton alloc] init];
-    [_broadcastButton setImage:[UIImage imageNamed:@"btn_join"] forState:UIControlStateNormal];
-    [_broadcastButton addTarget:self action:@selector(doBroadcastPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.boardView addSubview:_broadcastButton];
-    [self.broadcastButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view).offset(-2);
-        make.left.equalTo(self.boardView).offset(2);
-        if (self.isTeacher == AgoraClientRoleAudience) {
-            make.width.height.offset(0);//学生隐藏上麦按钮
-        }else {
-            make.width.height.offset(44);
+    CGFloat width = (_isTeacher == AgoraClientRoleBroadcaster)?btnH:0;
+    if (@available(iOS 12.0, *)) {
+        RPSystemBroadcastPickerView *systemBroadcastPicker = [[RPSystemBroadcastPickerView alloc] initWithFrame:CGRectMake(2, SCREEN_WIDTH-btnH-2, width, width)];
+        NSURL *url = [[NSBundle mainBundle] URLForResource:@"JJWhiteDemoBroadcast" withExtension:@"appex" subdirectory:@"PlugIns"];
+        if (url) {
+            NSBundle *bundle = [NSBundle bundleWithURL:url];
+            if (bundle) {
+                systemBroadcastPicker.preferredExtension = bundle.bundleIdentifier;
+            }
         }
-    }];
+        self.broadcastButton = systemBroadcastPicker;
+    } else {
+        UIButton *appBroadcastButton = [[UIButton alloc] initWithFrame:CGRectMake(2, SCREEN_WIDTH-btnH-2, width, width)];
+        [appBroadcastButton setImage:[UIImage imageNamed:@"btn_join"] forState:UIControlStateNormal];
+        [appBroadcastButton addTarget:self action:@selector(doBroadcastPressed:) forControlEvents:UIControlEventTouchUpInside];
+        self.broadcastButton = appBroadcastButton;
+    }
+    [self.boardView addSubview:self.broadcastButton];
+    
     //switchCameraButton
     _switchCameraButton = [[UIButton alloc] init];
     [_switchCameraButton setImage:[UIImage imageNamed:@"btn_overturn"] forState:UIControlStateNormal];
@@ -227,7 +257,7 @@ static NSInteger streamID = 0;
     [self.switchCameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.view).offset(-2);
         make.left.equalTo(self.broadcastButton.mas_right).offset(2);
-        make.width.height.offset(44);
+        make.width.height.offset(btnH);
     }];
     
     //按钮加载boardView上
@@ -238,7 +268,7 @@ static NSInteger streamID = 0;
     [self.audioMuteButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.view).offset(-2);
         make.left.equalTo(self.switchCameraButton.mas_right).offset(2);
-        make.width.height.offset(44);
+        make.width.height.offset(btnH);
     }];
     
     //videoButton  听众不显示开关摄像头按钮
@@ -250,7 +280,7 @@ static NSInteger streamID = 0;
         [self.videoButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.view).offset(-2);
             make.left.equalTo(self.audioMuteButton.mas_right).offset(2);
-            make.width.height.offset(44);
+            make.width.height.offset(btnH);
         }];
     }
     
@@ -267,7 +297,7 @@ static NSInteger streamID = 0;
 //            make.bottom.equalTo(self.view).offset(-2);
 //            make.left.equalTo(self.videoButton.mas_right).offset(20);
 //            make.right.equalTo(self.boardView).offset(50);
-//            make.width.height.offset(44);
+//            make.width.height.offset(btnH);
 //        }];
         //handButton
         _handButton = [[UIButton alloc] init];
@@ -278,7 +308,7 @@ static NSInteger streamID = 0;
             make.bottom.equalTo(self.view).offset(-2);
 //            make.left.equalTo(self.txtField.mas_right).offset(2);
             make.right.equalTo(self.boardView).offset(-2);
-            make.width.height.offset(44);
+            make.width.height.offset(btnH);
         }];
     }
     
@@ -472,6 +502,13 @@ static NSInteger streamID = 0;
     if (self.liveTableView) {
         [self updateInterfaceWithAnimation:YES];
     }
+}
+
+- (VideoViewLayouter *)viewLayouter {
+    if (!_viewLayouter) {
+        _viewLayouter = [[VideoViewLayouter alloc] init];
+    }
+    return _viewLayouter;
 }
 
 - (void)cancel {
@@ -738,7 +775,10 @@ static NSInteger streamID = 0;
 - (void)updateButtonsVisiablity {
     //通知主线程刷新
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.broadcastButton setImage:[UIImage imageNamed:self.isBroadcaster ? @"btn_join_cancel" : @"btn_join"] forState:UIControlStateNormal];
+        if (@available(iOS 12.0, *)) {
+        }else {
+            [(UIButton *)self.broadcastButton setImage:[UIImage imageNamed:self.isBroadcaster ? @"btn_join_cancel" : @"btn_join"] forState:UIControlStateNormal];
+        }
         self.audioMuteButton.hidden = !self.isBroadcaster;
         self.switchCameraButton.hidden = !self.isBroadcaster;
         self.videoButton.hidden = !self.isBroadcaster;
@@ -764,6 +804,11 @@ static NSInteger streamID = 0;
         [self.delegate liveVCNeedClose:self];
     }
     
+    //关闭录屏
+    [self stopReplayKitBroadcasting];
+    
+    CFNotificationCenterRef notification = CFNotificationCenterGetDarwinNotifyCenter ();
+    CFNotificationCenterPostNotification(notification, CFSTR("cn.com.mude.JJWhiteDemo.StopScreen"), NULL,NULL, YES);
     //TODO 向所有人发送关闭直播间的信息
     
 }
@@ -790,8 +835,30 @@ static NSInteger streamID = 0;
     } else {
         displaySessions = [self.videoSessions copy];
     }
+    NSMutableArray *sessions = [[NSMutableArray alloc] init];
+    BOOL isScreen = NO;
+    for (VideoSession *session in displaySessions) {
+        if (session.uid == _mode.peerId + 10000) {
+            if (_isTeacher == AgoraClientRoleAudience) {
+                //录屏直播不需要镜像
+                [self.rtcEngine setLocalVideoMirrorMode:AgoraVideoMirrorModeDisabled];
+                [self.rtcEngine setParameters:@"{\"che.video.enableRemoteViewMirror\":false}"];
+                isScreen = YES;
+                [self.viewLayouter layoutSessions:@[session] fullSession:session inContainer:self.cameraPreview];
+                self.cameraPreview.hidden = NO;
+            }
+        }else {
+            [self.rtcEngine setLocalVideoMirrorMode:AgoraVideoMirrorModeEnabled];
+            [self.rtcEngine setParameters:@"{\"che.video.enableRemoteViewMirror\":true}"];
+            [sessions addObject:session];
+        }
+    }
+    //如果没有录屏直播的session，则隐藏cameraPreview
+    if (isScreen == NO) {
+        self.cameraPreview.hidden = YES;
+    }
     
-    self.liveTableView.sessions = displaySessions;
+    self.liveTableView.sessions = sessions;
     [self setStreamTypeForSessions:displaySessions fullSession:self.fullSession];
 }
 
@@ -930,23 +997,33 @@ static NSInteger streamID = 0;
     }
 }
 
+#pragma mark ---按钮点击事件
 //点击事件
 - (void)doBroadcastPressed:(UIButton *)sender {
-    if (self.isBroadcaster) {
-        self.clientRole = AgoraClientRoleAudience;
-        self.isPencil = YES;
-        if (self.fullSession.uid == 0) {
-            self.fullSession = nil;
+//    if (self.isBroadcaster) {
+//        self.clientRole = AgoraClientRoleAudience;
+//        self.isPencil = YES;
+//        if (self.fullSession.uid == 0) {
+//            self.fullSession = nil;
+//        }
+//    } else {
+//        self.isAudio = NO;
+//        self.isVideo = NO;
+//        self.clientRole = AgoraClientRoleBroadcaster;
+//        self.isPencil = NO;
+//    }
+//
+//    [self.rtcEngine setClientRole:self.clientRole];
+//    [self updateInterfaceWithAnimation:YES];
+    if (_isTeacher == AgoraClientRoleBroadcaster) {
+        if (self.isBroadcaster) {
+            [self startReplayKitBroadcasting];
+        } else {
+            [self stopReplayKitBroadcasting];
         }
-    } else {
-        self.isAudio = NO;
-        self.isVideo = NO;
-        self.clientRole = AgoraClientRoleBroadcaster;
-        self.isPencil = NO;
     }
     
-    [self.rtcEngine setClientRole:self.clientRole];
-    [self updateInterfaceWithAnimation:YES];
+    
 }
 - (void)doMutePressed:(UIButton *)sender {
     self.isAudio = !self.isAudio;
@@ -1285,5 +1362,86 @@ static NSInteger streamID = 0;
         }
     }
 }
+
+#pragma mark  录屏相关
+- (void)startReplayKitBroadcasting {
+    if (![RPScreenRecorder sharedRecorder].isAvailable) {
+        return;
+    }
+    [RPScreenRecorder sharedRecorder].cameraEnabled = YES;
+    [RPScreenRecorder sharedRecorder].microphoneEnabled = YES;
+    
+    NSString *bundleID = @"";
+    
+    NSURL *url = [[NSBundle mainBundle] URLForResource:@"JJWhiteDemoBroadcastSetupUI" withExtension:@"appex" subdirectory:@"PlugIns"];
+    if (url) {
+        NSBundle *bundle = [NSBundle bundleWithURL:url];
+        if (bundle) {
+            bundleID = bundle.bundleIdentifier;
+        }
+    }
+    if (@available(iOS 11.0, *)) {
+        [RPBroadcastActivityViewController loadBroadcastActivityViewControllerWithPreferredExtension:bundleID handler:^(RPBroadcastActivityViewController * _Nullable broadcastActivityViewController, NSError * _Nullable error) {
+            [self presentBroadcastActivityVC:broadcastActivityViewController];
+        }];
+    } else {
+        // Fallback on earlier versions
+        [RPBroadcastActivityViewController loadBroadcastActivityViewControllerWithHandler:^(RPBroadcastActivityViewController * _Nullable broadcastActivityViewController, NSError * _Nullable error) {
+            [self presentBroadcastActivityVC:broadcastActivityViewController];
+        }];
+    }
+    
+}
+
+- (void)presentBroadcastActivityVC:(RPBroadcastActivityViewController *)broadcastActivityVC{
+    if (!broadcastActivityVC) {
+        return;
+    }
+    broadcastActivityVC.delegate = self;
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        broadcastActivityVC.modalPresentationStyle = UIModalPresentationPopover;
+        broadcastActivityVC.popoverPresentationController.sourceView = _broadcastButton;
+        broadcastActivityVC.popoverPresentationController.sourceRect = _broadcastButton.frame;
+        broadcastActivityVC.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
+    }
+    [self presentViewController:broadcastActivityVC animated:YES completion:nil];
+    self.broadcastActivityVC = broadcastActivityVC;
+}
+
+- (void)stopReplayKitBroadcasting {
+    if (_broadcastController) {
+        [_broadcastController finishBroadcastWithHandler:^(NSError * _Nullable error) {
+            
+        }];
+    }
+}
+
+- (void)broadcastActivityViewController:(RPBroadcastActivityViewController *)broadcastActivityViewController didFinishWithBroadcastController:(RPBroadcastController *)broadcastController error:(NSError *)error {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        RPBroadcastActivityViewController *broadcastActivityVC = self.broadcastActivityVC;
+        if (broadcastActivityVC) {
+            [broadcastActivityVC dismissViewControllerAnimated:YES completion:nil];
+        }
+        self.broadcastController = broadcastController;
+        if (broadcastController) {
+            [broadcastController startBroadcastWithHandler:^(NSError * _Nullable error) {
+                if (error) {
+                    NSLog(@"startBroadcastWithHandler error:%@",error.localizedDescription);
+                }else {
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        UIView *cameraPreview = [RPScreenRecorder sharedRecorder].cameraPreviewView;
+//                        if (cameraPreview) {
+//                            cameraPreview.frame = CGRectMake(8, 28, 120, 180);
+//                            [self.view addSubview:cameraPreview];
+//                            self.cameraPreview = cameraPreview;
+//                        }
+//                    });
+                }
+            }];
+        }
+        
+    });
+}
+
 
 @end

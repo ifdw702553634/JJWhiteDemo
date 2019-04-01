@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ToolSelectTableViewCell.h"
 
-typedef void(^ToolSelectBlock)(ToolSelectTableViewCell *cell);
+typedef void(^ToolSelectBlock)(ToolSelectTableViewCell * _Nonnull cell);
 typedef void(^CancelBlock)(void);
 
 NS_ASSUME_NONNULL_BEGIN

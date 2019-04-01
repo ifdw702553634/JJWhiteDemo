@@ -10,7 +10,7 @@
 
 @class WhiteSettingViewController;
 @protocol SettingsDelegate <NSObject>
-- (void)settingsVC:(WhiteSettingViewController *)settingsVC didSelectProfile:(CGSize)profile;
+- (void)settingsVC:(WhiteSettingViewController *_Nonnull)settingsVC didSelectProfile:(CGSize)profile;
 @end
 
 NS_ASSUME_NONNULL_BEGIN

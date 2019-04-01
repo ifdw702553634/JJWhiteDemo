@@ -36,7 +36,9 @@ typedef NS_ENUM(NSInteger, ToolType) {
     //选择工具
     ToolTypeSelector,
     //插入图片
-    ToolTypeAddImage
+    ToolTypeAddImage,
+    //屏幕录制
+    ToolTypeScreen
 };
 
 //左边教具栏目按钮的枚举

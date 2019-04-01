@@ -17,7 +17,7 @@ typedef struct  {
 
 @class WhiteRoomViewController;
 @protocol LiveRoomDelegate <NSObject>
-- (void)liveVCNeedClose:(WhiteRoomViewController *)liveVC;
+- (void)liveVCNeedClose:(WhiteRoomViewController *_Nullable)liveVC;
 @end
 
 typedef void(^RoomBlock)(WhiteRoom * _Nullable room, NSError * _Nullable eroror);

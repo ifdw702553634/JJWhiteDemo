@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BroadcastSetupViewController">
+            <connections>
+                <outlet property="channelNameTextField" destination="qfx-1g-EDs" id="C89-HP-Eg6"/>
+                <outlet property="view" destination="zJm-xb-quh" id="x2v-zl-2bh"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="zJm-xb-quh">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iSh-js-qEL">
+                    <rect key="frame" x="16" y="0.0" width="48" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="9zN-eX-FZe"/>
+                    </constraints>
+                    <state key="normal" title="Cancel"/>
+                    <connections>
+                        <action selector="doCancelPressed:" destination="-1" eventType="touchUpInside" id="d6m-O8-I08"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Agora Screen Sharing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iDp-iW-6BS">
+                    <rect key="frame" x="76.5" y="52" width="167" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ErL-uT-win">
+                    <rect key="frame" x="95.5" y="149" width="129" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="lov-EQ-VdI"/>
+                    </constraints>
+                    <state key="normal" title="Start Broadcasting"/>
+                    <connections>
+                        <action selector="doStartPressed:" destination="-1" eventType="touchUpInside" id="LTa-RF-Swn"/>
+                    </connections>
+                </button>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Channel Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qfx-1g-EDs">
+                    <rect key="frame" x="16" y="89" width="288" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="ctr-Wy-ZkE"/>
+                    </constraints>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="iDp-iW-6BS" firstAttribute="centerX" secondItem="zJm-xb-quh" secondAttribute="centerX" id="2Ec-NC-35q"/>
+                <constraint firstItem="qfx-1g-EDs" firstAttribute="leading" secondItem="zJm-xb-quh" secondAttribute="leading" constant="16" id="8MF-tQ-9it"/>
+                <constraint firstItem="iSh-js-qEL" firstAttribute="top" secondItem="zJm-xb-quh" secondAttribute="top" id="DeQ-Gg-tK4"/>
+                <constraint firstItem="iDp-iW-6BS" firstAttribute="top" secondItem="iSh-js-qEL" secondAttribute="bottom" constant="8" id="Dwa-l0-ru6"/>
+                <constraint firstItem="iSh-js-qEL" firstAttribute="leading" secondItem="zJm-xb-quh" secondAttribute="leading" constant="16" id="ZRW-on-qh4"/>
+                <constraint firstItem="qfx-1g-EDs" firstAttribute="top" secondItem="iDp-iW-6BS" secondAttribute="bottom" constant="16" id="bo6-WK-mrk"/>
+                <constraint firstItem="ErL-uT-win" firstAttribute="top" secondItem="qfx-1g-EDs" secondAttribute="bottom" constant="16" id="etw-rq-hmM"/>
+                <constraint firstItem="ErL-uT-win" firstAttribute="centerX" secondItem="zJm-xb-quh" secondAttribute="centerX" id="h4H-sw-Ov1"/>
+                <constraint firstAttribute="trailing" secondItem="qfx-1g-EDs" secondAttribute="trailing" constant="16" id="ofs-hI-eiO"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="7G0-NG-1iR"/>
+        </view>
+    </objects>
+</document>
