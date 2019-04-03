@@ -68,13 +68,14 @@
     [HandlerBusiness JJGetServiceWithApicode:ApiCodeGetClassRoom Parameters:@{@"roomId":@(roomId)} Success:^(id data, id msg) {
         NSLog(@"%@", data);
         self.dataDic = data;
+        //判断自己是否为该房间的老师
         if ([[data[@"teacher_id"] description] isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:@"uid"]]) {
             self.clientRole = AgoraClientRoleBroadcaster;
         }else {
             self.clientRole = AgoraClientRoleAudience;
         }
         ChatMode mode;
-        mode.type = ChatTypePeer;
+        mode.type = ChatTypePeer;//设置为单聊模式
 //        mode.name = [data[@"teacher_id"] description];
         mode.peerId = [data[@"teacher_id"] integerValue];
         
@@ -122,12 +123,10 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-
 #pragma mark - Button Action
 - (void)joinRoom:(UIButton *)sender
 {
     [self loadDataWithRoomId:sender.tag];
-    
 }
 
 //- (void)createRoom:(UIButton *)sender

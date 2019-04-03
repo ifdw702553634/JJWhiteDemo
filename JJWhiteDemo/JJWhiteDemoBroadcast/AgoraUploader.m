@@ -16,8 +16,6 @@ static AgoraRtcEngineKit *sharedAgoraEngine = nil;
 static CGSize videoDimension;
 @interface AgoraUploader()
 
-//@property (nonatomic, assign) CGSize videoDimension;
-//@property (nonatomic, strong) AgoraRtcEngineKit *sharedAgoraEngine;
 
 @end
 

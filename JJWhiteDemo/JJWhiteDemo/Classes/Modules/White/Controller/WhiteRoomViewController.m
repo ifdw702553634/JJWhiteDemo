@@ -142,7 +142,7 @@ static NSInteger streamID = 0;
     
     self.cameraPreview = [[UIView alloc] init];
     self.cameraPreview.hidden = YES;
-    [self.view addSubview:_cameraPreview];
+    [self.boardView addSubview:_cameraPreview];
     [self.cameraPreview mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuideBottom);
         make.bottom.equalTo(self.mas_bottomLayoutGuideTop);
@@ -377,7 +377,7 @@ static NSInteger streamID = 0;
 - (void)loadChannelAllUser {
     //获取个人信息
     [HandlerBusiness JJGetServiceWithApicode:ApiCodeGetUserById Parameters:@{@"userId": [UserDefaultsUtils valueWithKey:@"uid"]} Success:^(id data, id msg) {
-        DBG(@"%@", data);
+        DBG(@"ApiCodeGetUserById-----%@", data);
     } Failed:^(NSString *error, NSString *errorDescription) {
         DBG(@"ApiCodeGetUserById-----api fail %@",error);
     } Complete:^{
@@ -386,7 +386,17 @@ static NSInteger streamID = 0;
     
     //获取频道User总数
     [HandlerBusiness JJGetServiceWithApicode:ApiCodeGetChannelAllUser Parameters:@{@"cname":self.roomName} Success:^(id data, id msg) {
-        DBG(@"%@", data);
+        DBG(@"ApiCodeGetChannelAllUser-----%@", data);
+        if (self.isTeacher == AgoraClientRoleAudience) {
+            NSArray *broadcasters = data[@"broadcasters"];
+            if (broadcasters.count == 0) {
+                UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:nil message:@"老师不在线哦" preferredStyle:UIAlertControllerStyleAlert];
+                [alertVC setDismissInterval:kTimeSpan complete:^{
+                    [self leaveChannel];
+                }];
+                [self presentViewController:alertVC animated:YES completion:nil];
+            }
+        }
     } Failed:^(NSString *error, NSString *errorDescription) {
         DBG(@"ApiCodeGetChannelAllUser-----api fail %@",error);
     } Complete:^{
@@ -781,6 +791,77 @@ static NSInteger streamID = 0;
 
 #pragma mark -  视频直播
 
+- (void)loadAgoraKit {
+    self.rtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:[KeyCenter AppId] delegate:self];
+    [self.rtcEngine setChannelProfile:AgoraChannelProfileLiveBroadcasting];
+    [self.rtcEngine setLocalVideoMirrorMode:AgoraVideoMirrorModeEnabled];
+    [self.rtcEngine setParameters:@"{\"che.video.enableRemoteViewMirror\":true}"];
+    // Warning: only enable dual stream mode if there will be more than one broadcaster in the channel
+    [self.rtcEngine enableDualStreamMode:YES];
+    
+    [self.rtcEngine enableVideo];
+    AgoraVideoEncoderConfiguration *configuration = [[AgoraVideoEncoderConfiguration alloc] initWithSize:self.videoProfile
+                                                                                               frameRate:AgoraVideoFrameRateFps24
+                                                                                                 bitrate:AgoraVideoBitrateStandard
+                                                                                         orientationMode:AgoraVideoOutputOrientationModeAdaptative];
+    [self.rtcEngine setVideoEncoderConfiguration:configuration];
+    [self.rtcEngine setClientRole:self.clientRole];
+    
+    [self.rtcEngine createDataStream:&streamID reliable:YES ordered:YES];
+    
+    if (self.isBroadcaster) {
+        [self.rtcEngine startPreview];
+    }
+    
+    [self addLocalSession];
+    
+    //用户 ID，32 位无符号整数。建议设置范围：1到 (232-1)，并保证唯一性。如果不指定（即设为0），SDK 会自动分配一个，并在 joinSuccessBlock 回调方法中返回，App 层必须记住该返回值并维护，SDK 不对该返回值进行维护。
+    //uid为用户id
+    int code = [self.rtcEngine joinChannelByToken:nil channelId:self.roomName info:nil uid:[[[NSUserDefaults standardUserDefaults] stringForKey:@"uid"] integerValue] joinSuccess:nil];
+    if (code == 0) {
+        [self setIdleTimerActive:NO];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setAlert:[NSString stringWithFormat:@"Join channel failed: %d", code]];
+        });
+    }
+    if (_isTeacher == AgoraClientRoleBroadcaster) {
+        _rightView.tableType = 2;//默认设置为2
+        //获取观众列表
+        [self loadAudienceList:RefreshTypeRefresh];
+    }
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
+    VideoSession *userSession = [self videoSessionOfUid:uid];
+    [self.rtcEngine setupRemoteVideo:userSession.canvas];
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine firstLocalVideoFrameWithSize:(CGSize)size elapsed:(NSInteger)elapsed {
+    if (self.videoSessions.count) {
+        [self updateInterfaceWithAnimation:NO];
+    }
+}
+
+- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason {
+    VideoSession *deleteSession;
+    for (VideoSession *session in self.videoSessions) {
+        if (session.uid == uid) {
+            deleteSession = session;
+        }
+    }
+    
+    if (deleteSession) {
+        [self.videoSessions removeObject:deleteSession];
+        [deleteSession.hostingView removeFromSuperview];
+        [self updateInterfaceWithAnimation:YES];
+        
+        if (deleteSession == self.fullSession) {
+            self.fullSession = nil;
+        }
+    }
+}
+
 - (void)updateButtonsVisiablity {
     //通知主线程刷新
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -849,7 +930,10 @@ static NSInteger streamID = 0;
     BOOL isScreen = NO;
     for (VideoSession *session in displaySessions) {
         if (session.uid == _mode.peerId + 10000) {
+            //学生角色需要显示录屏直播
             if (_isTeacher == AgoraClientRoleAudience) {
+                //录屏直播单独处理，mode
+                session.canvas.renderMode = AgoraVideoRenderModeFit;
                 //录屏直播不需要镜像
                 [self.rtcEngine setLocalVideoMirrorMode:AgoraVideoMirrorModeDisabled];
                 [self.rtcEngine setParameters:@"{\"che.video.enableRemoteViewMirror\":false}"];
@@ -858,6 +942,7 @@ static NSInteger streamID = 0;
                 self.cameraPreview.hidden = NO;
             }
         }else {
+            //摄像头需要打开镜像模式
             [self.rtcEngine setLocalVideoMirrorMode:AgoraVideoMirrorModeEnabled];
             [self.rtcEngine setParameters:@"{\"che.video.enableRemoteViewMirror\":true}"];
             [sessions addObject:session];
@@ -934,77 +1019,6 @@ static NSInteger streamID = 0;
     //初始化颜色为黑色，发送通知
     NSDictionary *dic = @{@"colorArray":@[@(0),@(0),@(0)]};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"colorChange" object:dic];
-}
-
-- (void)loadAgoraKit {
-    self.rtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:[KeyCenter AppId] delegate:self];
-    [self.rtcEngine setChannelProfile:AgoraChannelProfileLiveBroadcasting];
-    [self.rtcEngine setLocalVideoMirrorMode:AgoraVideoMirrorModeEnabled];
-    [self.rtcEngine setParameters:@"{\"che.video.enableRemoteViewMirror\":true}"];
-    // Warning: only enable dual stream mode if there will be more than one broadcaster in the channel
-    [self.rtcEngine enableDualStreamMode:YES];
-    
-    [self.rtcEngine enableVideo];
-    AgoraVideoEncoderConfiguration *configuration = [[AgoraVideoEncoderConfiguration alloc] initWithSize:self.videoProfile
-                                                                                               frameRate:AgoraVideoFrameRateFps24
-                                                                                                 bitrate:AgoraVideoBitrateStandard
-                                                                                         orientationMode:AgoraVideoOutputOrientationModeAdaptative];
-    [self.rtcEngine setVideoEncoderConfiguration:configuration];
-    [self.rtcEngine setClientRole:self.clientRole];
-    
-    [self.rtcEngine createDataStream:&streamID reliable:YES ordered:YES];
-    
-    if (self.isBroadcaster) {
-        [self.rtcEngine startPreview];
-    }
-    
-    [self addLocalSession];
-    
-    //用户 ID，32 位无符号整数。建议设置范围：1到 (232-1)，并保证唯一性。如果不指定（即设为0），SDK 会自动分配一个，并在 joinSuccessBlock 回调方法中返回，App 层必须记住该返回值并维护，SDK 不对该返回值进行维护。
-    //uid为用户id
-    int code = [self.rtcEngine joinChannelByToken:nil channelId:self.roomName info:nil uid:[[[NSUserDefaults standardUserDefaults] stringForKey:@"uid"] integerValue] joinSuccess:nil];
-    if (code == 0) {
-        [self setIdleTimerActive:NO];
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self setAlert:[NSString stringWithFormat:@"Join channel failed: %d", code]];
-        });
-    }
-    if (_isTeacher == AgoraClientRoleBroadcaster) {
-        _rightView.tableType = 2;//默认设置为2
-        //获取观众列表
-        [self loadAudienceList:RefreshTypeRefresh];
-    }
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine didJoinedOfUid:(NSUInteger)uid elapsed:(NSInteger)elapsed {
-    VideoSession *userSession = [self videoSessionOfUid:uid];
-    [self.rtcEngine setupRemoteVideo:userSession.canvas];
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine firstLocalVideoFrameWithSize:(CGSize)size elapsed:(NSInteger)elapsed {
-    if (self.videoSessions.count) {
-        [self updateInterfaceWithAnimation:NO];
-    }
-}
-
-- (void)rtcEngine:(AgoraRtcEngineKit *)engine didOfflineOfUid:(NSUInteger)uid reason:(AgoraUserOfflineReason)reason {
-    VideoSession *deleteSession;
-    for (VideoSession *session in self.videoSessions) {
-        if (session.uid == uid) {
-            deleteSession = session;
-        }
-    }
-    
-    if (deleteSession) {
-        [self.videoSessions removeObject:deleteSession];
-        [deleteSession.hostingView removeFromSuperview];
-        [self updateInterfaceWithAnimation:YES];
-        
-        if (deleteSession == self.fullSession) {
-            self.fullSession = nil;
-        }
-    }
 }
 
 #pragma mark ---按钮点击事件

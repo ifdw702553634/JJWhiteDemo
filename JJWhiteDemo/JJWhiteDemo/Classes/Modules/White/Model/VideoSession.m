@@ -19,7 +19,7 @@
         self.canvas = [[AgoraRtcVideoCanvas alloc] init];
         self.canvas.uid = uid;
         self.canvas.view = self.hostingView;
-        self.canvas.renderMode = AgoraVideoRenderModeFit;
+        self.canvas.renderMode = AgoraVideoRenderModeHidden;
     }
     return self;
 }
