@@ -60,7 +60,7 @@
             self.cancelBtn.hidden = NO;
         }else {
             if (_uid == _teacherId) {
-                self.selfLabel.text = @"主播";
+                self.selfLabel.text = @"老师";
                 [self.selfLabel setBackgroundColor:[UIColor redColor]];
             }else {
                 self.selfLabel.text = [NSString stringWithFormat:@"%ld",uid];

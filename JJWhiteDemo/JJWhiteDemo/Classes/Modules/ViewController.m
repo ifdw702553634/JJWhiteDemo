@@ -127,12 +127,9 @@
         if (errorCode != AgoraRtmLogoutErrorOk) {
             return;
         }
-        
         [AgoraRtm setStatus:LoginStatusOffline];
     }];
 }
-
-
 
 - (BOOL)checkString:(NSString *)string {
     if (!string.length) {

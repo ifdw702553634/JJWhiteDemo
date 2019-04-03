@@ -12,7 +12,6 @@
 #import "ToolSelectView.h"
 #import "ColorTableViewController.h"
 //live
-#import "LiveRoomView.h"
 #import "LiveTableView.h"
 #import "VideoSession.h"
 #import "KeyCenter.h"
@@ -31,7 +30,7 @@
 
 static NSInteger btnH = 44;
 
-@interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate,WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate,AgoraRtcEngineDelegate,UITextFieldDelegate,AgoraRtmDelegate,RPBroadcastActivityViewControllerDelegate>{
+@interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate,WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate,AgoraRtcEngineDelegate,AgoraRtmDelegate,RPBroadcastActivityViewControllerDelegate>{
 }
 @property (nonatomic, strong) WhiteSDK *sdk;
 @property (nonatomic, assign, getter=isReconnecting) BOOL reconnecting;
@@ -88,34 +87,17 @@ static NSInteger streamID = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = BG_COLOR;
     self.isTeacher = self.clientRole;
-    
-    NSString *sdkToken = [WhiteUtils sdkToken];
-    self.view.backgroundColor = [UIColor colorWithRed:66.f/255.f green:66.f/255.f blue:66.f/255.f alpha:0.5f];
-    
-    if ([sdkToken length] == 0) {
-        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"sdk token 不合法", nil) message:NSLocalizedString(@"请在 console.herewhite.com 注册并申请 Token，并在 WhiteUtils sdkToken 方法中，填入 SDKToken 进行测试", nil) preferredStyle:UIAlertControllerStyleAlert];
-        alertVC.popoverPresentationController.sourceView = self.view;
-        alertVC.popoverPresentationController.sourceRect = self.view.bounds;
-        UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [self.navigationController popViewControllerAnimated:YES];
-        }];
-        [alertVC addAction:action];
-        [self presentViewController:alertVC animated:YES completion:nil];
-    } else if ([self.roomUuid length] > 0) {
-        [self joinRoom];
-    } else {
-        [self createRoom];
-    }
-    
+    [self whiteSDK];
     [self prepareView];
     self.videoSessions = [[NSMutableArray alloc] init];
     [self loadAgoraKit];
-    
     //RTM 相关
     [AgoraRtm updateDelegate:self];
     [self addNotificationObserver];
+    
+    [self loadChannelAllUser];
     // Do any additional setup after loading the view.
 }
 
@@ -136,7 +118,6 @@ static NSInteger streamID = 0;
     ((AppDelegate *)[UIApplication sharedApplication].delegate).allowRotation = NO;
     NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
     [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
-
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -287,18 +268,6 @@ static NSInteger streamID = 0;
     
     //只有观众模式才有举手按钮以及消息输入框
     if (_isTeacher == AgoraClientRoleAudience) {
-        //发消息相关  ###暂时不需要发消息
-//        _txtField = [[UITextField alloc] init];
-//        _txtField.delegate = self;
-//        _txtField.placeholder = @"发送消息请输入...";
-//        _txtField.returnKeyType = UIReturnKeySend;
-//        [self.boardView addSubview:_txtField];
-//        [_txtField mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.bottom.equalTo(self.view).offset(-2);
-//            make.left.equalTo(self.videoButton.mas_right).offset(20);
-//            make.right.equalTo(self.boardView).offset(50);
-//            make.width.height.offset(btnH);
-//        }];
         //handButton
         _handButton = [[UIButton alloc] init];
         [_handButton setImage:[UIImage imageNamed:@"btn_hand"] forState:UIControlStateNormal];
@@ -342,6 +311,8 @@ static NSInteger streamID = 0;
     }];
     [self.view bringSubviewToFront:_progressHUD];
 }
+
+
 
 - (void)optionWithAudienceId:(NSInteger)uid {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -398,7 +369,26 @@ static NSInteger streamID = 0;
         }
         [self.rightView.tableView.mj_header endRefreshing];
         [self.rightView.tableView.mj_footer endRefreshingWithNoMoreData];
-        DBG(@"api fail %@",error);
+        DBG(@"ApiCodeGetChannelUser-----api fail %@",error);
+    } Complete:^{
+    }];
+}
+
+- (void)loadChannelAllUser {
+    //获取个人信息
+    [HandlerBusiness JJGetServiceWithApicode:ApiCodeGetUserById Parameters:@{@"userId": [UserDefaultsUtils valueWithKey:@"uid"]} Success:^(id data, id msg) {
+        DBG(@"%@", data);
+    } Failed:^(NSString *error, NSString *errorDescription) {
+        DBG(@"ApiCodeGetUserById-----api fail %@",error);
+    } Complete:^{
+        
+    }];
+    
+    //获取频道User总数
+    [HandlerBusiness JJGetServiceWithApicode:ApiCodeGetChannelAllUser Parameters:@{@"cname":self.roomName} Success:^(id data, id msg) {
+        DBG(@"%@", data);
+    } Failed:^(NSString *error, NSString *errorDescription) {
+        DBG(@"ApiCodeGetChannelAllUser-----api fail %@",error);
     } Complete:^{
     }];
 }
@@ -528,6 +518,25 @@ static NSInteger streamID = 0;
 
 
 #pragma mark - Room Action
+
+- (void)whiteSDK {
+    NSString *sdkToken = [WhiteUtils sdkToken];
+    
+    if ([sdkToken length] == 0) {
+        UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"sdk token 不合法", nil) message:NSLocalizedString(@"请在 console.herewhite.com 注册并申请 Token，并在 WhiteUtils sdkToken 方法中，填入 SDKToken 进行测试", nil) preferredStyle:UIAlertControllerStyleAlert];
+        alertVC.popoverPresentationController.sourceView = self.view;
+        alertVC.popoverPresentationController.sourceRect = self.view.bounds;
+        UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
+        [alertVC addAction:action];
+        [self presentViewController:alertVC animated:YES completion:nil];
+    } else if ([self.roomUuid length] > 0) {
+        [self joinRoom];
+    } else {
+        [self createRoom];
+    }
+}
 
 /**
  创建房间：
@@ -807,6 +816,7 @@ static NSInteger streamID = 0;
     //关闭录屏
     [self stopReplayKitBroadcasting];
     
+    //向extension发送消息
     CFNotificationCenterRef notification = CFNotificationCenterGetDarwinNotifyCenter ();
     CFNotificationCenterPostNotification(notification, CFSTR("cn.com.mude.JJWhiteDemo.StopScreen"), NULL,NULL, YES);
     //TODO 向所有人发送关闭直播间的信息
@@ -1000,21 +1010,6 @@ static NSInteger streamID = 0;
 #pragma mark ---按钮点击事件
 //点击事件
 - (void)doBroadcastPressed:(UIButton *)sender {
-//    if (self.isBroadcaster) {
-//        self.clientRole = AgoraClientRoleAudience;
-//        self.isPencil = YES;
-//        if (self.fullSession.uid == 0) {
-//            self.fullSession = nil;
-//        }
-//    } else {
-//        self.isAudio = NO;
-//        self.isVideo = NO;
-//        self.clientRole = AgoraClientRoleBroadcaster;
-//        self.isPencil = NO;
-//    }
-//
-//    [self.rtcEngine setClientRole:self.clientRole];
-//    [self updateInterfaceWithAnimation:YES];
     if (_isTeacher == AgoraClientRoleBroadcaster) {
         if (self.isBroadcaster) {
             [self startReplayKitBroadcasting];
@@ -1022,8 +1017,6 @@ static NSInteger streamID = 0;
             [self stopReplayKitBroadcasting];
         }
     }
-    
-    
 }
 - (void)doMutePressed:(UIButton *)sender {
     self.isAudio = !self.isAudio;
@@ -1215,16 +1208,6 @@ static NSInteger streamID = 0;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if ([self pressedReturnToSendText:textField.text]) {
-        textField.text = nil;
-    } else {
-        [self.view endEditing:YES];
-    }
-    return YES;
-}
-
 #pragma mark - Peer
 //输入框发送文本信息
 - (void)sendPeer:(NSString *)peer msg: (NSString *)msg {
@@ -1333,18 +1316,6 @@ static NSInteger streamID = 0;
             case MessageTypeHand:
             {
                 [self.view makeToast:[NSString stringWithFormat:@"%ld举手了",(long)model.fromUser]];
-//                UIAlertController *ac=[UIAlertController alertControllerWithTitle:ALERT_TITLE message:[NSString stringWithFormat:@"%ld举手了",(long)model.fromUser] preferredStyle:UIAlertControllerStyleAlert];
-//                [ac setCancelTitle:@"忽略" SureTitle:@"上麦" cancelBlock:^(UIAlertAction * _Nullable action) {
-//                } sureBlock:^(UIAlertAction * _Nullable action) {
-//                    SendMessageModel *msgModel = [[SendMessageModel alloc] init];
-//                    msgModel.type = MessageTypeOnSpeak;
-//                    msgModel.fromUser = [[UserDefaultsUtils valueWithKey:@"uid"] integerValue];
-//                    msgModel.toUser = model.fromUser;
-//                    msgModel.msg = @"拉上麦序";
-//                    msgModel.time = [AppUtils getCurrentTimes];
-//                    [self sendMessageWithPeer:[NSString stringWithFormat:@"%ld",(long)model.fromUser] model:msgModel];
-//                }];
-//                [self presentViewController:ac animated:YES completion:nil];
                 break;
             }
             case MessageTypeCloseAudio:
@@ -1411,7 +1382,6 @@ static NSInteger streamID = 0;
 - (void)stopReplayKitBroadcasting {
     if (_broadcastController) {
         [_broadcastController finishBroadcastWithHandler:^(NSError * _Nullable error) {
-            
         }];
     }
 }
@@ -1428,18 +1398,9 @@ static NSInteger streamID = 0;
                 if (error) {
                     NSLog(@"startBroadcastWithHandler error:%@",error.localizedDescription);
                 }else {
-//                    dispatch_async(dispatch_get_main_queue(), ^{
-//                        UIView *cameraPreview = [RPScreenRecorder sharedRecorder].cameraPreviewView;
-//                        if (cameraPreview) {
-//                            cameraPreview.frame = CGRectMake(8, 28, 120, 180);
-//                            [self.view addSubview:cameraPreview];
-//                            self.cameraPreview = cameraPreview;
-//                        }
-//                    });
                 }
             }];
         }
-        
     });
 }
 

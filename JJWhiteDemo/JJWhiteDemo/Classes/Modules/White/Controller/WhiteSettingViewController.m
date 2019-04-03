@@ -37,6 +37,7 @@
                       @(AgoraVideoDimension320x240),
                       @(AgoraVideoDimension640x360),
                       @(AgoraVideoDimension640x480),
+                      @(AgoraVideoDimension960x720),
                       @(AgoraVideoDimension1280x720)];
     }
     return _profiles;

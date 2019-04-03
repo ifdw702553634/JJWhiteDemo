@@ -140,12 +140,12 @@
 //    [self.navigationController pushViewController:vc animated:YES];
 //}
 //
-//- (void)replayRoom:(UIButton *)sender
-//{
-//    WhitePlayerViewController *vc = [[WhitePlayerViewController alloc] init];
-//    vc.roomUuid = [self.inputV.text length] > 0 ? self.inputV.text : @"1df260f6996948a2ab34fed4479610f0";
-//    [self.navigationController pushViewController:vc animated:YES];
-//}
+- (void)replayRoom:(UIButton *)sender
+{
+    WhitePlayerViewController *vc = [[WhitePlayerViewController alloc] init];
+    vc.roomUuid = @"cb1d4a8d990c432ea814c110a8db1390";
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 #pragma mark - setting delegete
 - (void)settingsVC:(WhiteSettingViewController *)settingsVC didSelectProfile:(CGSize)profile {

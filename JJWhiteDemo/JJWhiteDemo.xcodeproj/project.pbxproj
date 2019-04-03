@@ -72,8 +72,6 @@
 		C3DCB8C422374D5C00DF4B3C /* WhiteSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3DCB8C222374D5C00DF4B3C /* WhiteSettingViewController.xib */; };
 		C3DCB8CA22374E8B00DF4B3C /* WhiteSettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3DCB8C822374E8B00DF4B3C /* WhiteSettingTableViewCell.m */; };
 		C3DCB8CB22374E8B00DF4B3C /* WhiteSettingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3DCB8C922374E8B00DF4B3C /* WhiteSettingTableViewCell.xib */; };
-		C3DCB8CE2237532000DF4B3C /* LiveRoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = C3DCB8CD2237532000DF4B3C /* LiveRoomView.m */; };
-		C3DCB8D02237532E00DF4B3C /* LiveRoomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3DCB8CF2237532E00DF4B3C /* LiveRoomView.xib */; };
 		C3DCB8D8223757BE00DF4B3C /* KeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = C3DCB8D2223757BD00DF4B3C /* KeyCenter.m */; };
 		C3DCB8D9223757BE00DF4B3C /* VideoViewLayouter.m in Sources */ = {isa = PBXBuildFile; fileRef = C3DCB8D3223757BD00DF4B3C /* VideoViewLayouter.m */; };
 		C3DCB8DA223757BE00DF4B3C /* VideoSession.m in Sources */ = {isa = PBXBuildFile; fileRef = C3DCB8D7223757BE00DF4B3C /* VideoSession.m */; };
@@ -244,9 +242,6 @@
 		C3DCB8C722374E8B00DF4B3C /* WhiteSettingTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteSettingTableViewCell.h; sourceTree = "<group>"; };
 		C3DCB8C822374E8B00DF4B3C /* WhiteSettingTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteSettingTableViewCell.m; sourceTree = "<group>"; };
 		C3DCB8C922374E8B00DF4B3C /* WhiteSettingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WhiteSettingTableViewCell.xib; sourceTree = "<group>"; };
-		C3DCB8CC2237532000DF4B3C /* LiveRoomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveRoomView.h; sourceTree = "<group>"; };
-		C3DCB8CD2237532000DF4B3C /* LiveRoomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveRoomView.m; sourceTree = "<group>"; };
-		C3DCB8CF2237532E00DF4B3C /* LiveRoomView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LiveRoomView.xib; sourceTree = "<group>"; };
 		C3DCB8D2223757BD00DF4B3C /* KeyCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyCenter.m; sourceTree = "<group>"; };
 		C3DCB8D3223757BD00DF4B3C /* VideoViewLayouter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoViewLayouter.m; sourceTree = "<group>"; };
 		C3DCB8D4223757BD00DF4B3C /* KeyCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyCenter.h; sourceTree = "<group>"; };
@@ -581,9 +576,6 @@
 				C3DCB8C722374E8B00DF4B3C /* WhiteSettingTableViewCell.h */,
 				C3DCB8C822374E8B00DF4B3C /* WhiteSettingTableViewCell.m */,
 				C3DCB8C922374E8B00DF4B3C /* WhiteSettingTableViewCell.xib */,
-				C3DCB8CC2237532000DF4B3C /* LiveRoomView.h */,
-				C3DCB8CD2237532000DF4B3C /* LiveRoomView.m */,
-				C3DCB8CF2237532E00DF4B3C /* LiveRoomView.xib */,
 				C3689BB32237A8060069DC5B /* ToolSelectView.h */,
 				C3689BB42237A8060069DC5B /* ToolSelectView.m */,
 				C3689BB62237A8130069DC5B /* ToolSelectView.xib */,
@@ -840,7 +832,6 @@
 				C3D71CFC2243396F00CE2E4D /* RightMessageTableViewCell.xib in Resources */,
 				C3689BC72237B5710069DC5B /* ColorTableViewCell.xib in Resources */,
 				C3DCB8CB22374E8B00DF4B3C /* WhiteSettingTableViewCell.xib in Resources */,
-				C3DCB8D02237532E00DF4B3C /* LiveRoomView.xib in Resources */,
 				C3A7ED762245E01400378CDA /* RightAudienceTableViewCell.xib in Resources */,
 				C3DCB8C422374D5C00DF4B3C /* WhiteSettingViewController.xib in Resources */,
 				C3B83E3D223B3A36003E9443 /* LiveTableView.xib in Resources */,
@@ -989,7 +980,6 @@
 				C3B83E41223B3B23003E9443 /* LiveTableViewCell.m in Sources */,
 				C3B8FE83223217A20050312F /* ViewController.m in Sources */,
 				C3D71CFB2243396F00CE2E4D /* RightMessageTableViewCell.m in Sources */,
-				C3DCB8CE2237532000DF4B3C /* LiveRoomView.m in Sources */,
 				C3689BAF22379B510069DC5B /* WhiteBaseViewController.m in Sources */,
 				C3D71D0D22436A1800CE2E4D /* AppUtils.m in Sources */,
 				C3689BB52237A8060069DC5B /* ToolSelectView.m in Sources */,

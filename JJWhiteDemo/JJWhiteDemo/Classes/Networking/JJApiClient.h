@@ -7,6 +7,8 @@
 
 extern NSString *const ApiCodeGetClassRoom;
 extern NSString *const ApiCodeGetChannelUser;
+extern NSString *const ApiCodeGetChannelAllUser;
+extern NSString *const ApiCodeGetUserById;
 
 
 +(NSDictionary *)mapModel;
