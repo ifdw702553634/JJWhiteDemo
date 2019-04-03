@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1FBE2B4EAD42A8D009A07C7C /* libPods-JJWhiteDemoBroadcast.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43B035C07A773E3F6BB4E125 /* libPods-JJWhiteDemoBroadcast.a */; };
 		25AC91C64F91001D176D14F4 /* libPods-JJWhiteDemoUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 093D3B89F404E8B2FE5D1B83 /* libPods-JJWhiteDemoUITests.a */; };
 		3C41309BA12143DC852C9442 /* libPods-JJWhiteDemoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F28F4AF5B5E4FB0B3E48A45 /* libPods-JJWhiteDemoTests.a */; };
+		6B1F3AFDE5911F8FE6A9ADCF /* libPods-JJWhiteDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F42EB010A9C32ED40ED5CBD2 /* libPods-JJWhiteDemo.a */; };
 		8C0A4F5D6EBF7A26E36B9057 /* libPods-JJWhiteDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F42EB010A9C32ED40ED5CBD2 /* libPods-JJWhiteDemo.a */; };
 		C3434D79224CA5BD0075C385 /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = C3434D78224CA5BC0075C385 /* UIView+Toast.m */; };
 		C346B1D52251A07F0018C4C3 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C346B1D42251A07F0018C4C3 /* ReplayKit.framework */; };
@@ -20,7 +22,6 @@
 		C346B1F62251A1570018C4C3 /* KeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = C3DCB8D2223757BD00DF4B3C /* KeyCenter.m */; };
 		C346B1FE2251A1740018C4C3 /* AgoraUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = C346B1FB2251A16D0018C4C3 /* AgoraUploader.m */; };
 		C346B1FF2251A1740018C4C3 /* AgoraAudioProcessing.mm in Sources */ = {isa = PBXBuildFile; fileRef = C346B1F92251A16D0018C4C3 /* AgoraAudioProcessing.mm */; };
-		C346B2002251A1D10018C4C3 /* libPods-JJWhiteDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F42EB010A9C32ED40ED5CBD2 /* libPods-JJWhiteDemo.a */; };
 		C346B2042251A44D0018C4C3 /* BroadcastSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C346B2012251A44D0018C4C3 /* BroadcastSetupViewController.m */; };
 		C346B2052251A44D0018C4C3 /* BroadcastSetupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C346B2022251A44D0018C4C3 /* BroadcastSetupViewController.xib */; };
 		C348000622421AA400CEFA26 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C348000522421AA400CEFA26 /* SystemConfiguration.framework */; };
@@ -125,14 +126,16 @@
 
 /* Begin PBXFileReference section */
 		093D3B89F404E8B2FE5D1B83 /* libPods-JJWhiteDemoUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JJWhiteDemoUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1CEA9DDA25B3D9BA1312E470 /* Pods-JJWhiteDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemo/Pods-JJWhiteDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		241763CB224483B1000ED24D /* Enumeration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Enumeration.h; sourceTree = "<group>"; };
-		3739C2E9D3D2DBD13DEF53B4 /* Pods-JJWhiteDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemo/Pods-JJWhiteDemo.release.xcconfig"; sourceTree = "<group>"; };
+		273D911959B21B654ACD9E12 /* Pods-JJWhiteDemoBroadcast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoBroadcast.release.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoBroadcast/Pods-JJWhiteDemoBroadcast.release.xcconfig"; sourceTree = "<group>"; };
+		36A1F4CBFAD2AF57B57B16D6 /* Pods-JJWhiteDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemo/Pods-JJWhiteDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		43B035C07A773E3F6BB4E125 /* libPods-JJWhiteDemoBroadcast.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JJWhiteDemoBroadcast.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		481B2E6E520F831A3E51C7A6 /* Pods-JJWhiteDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoTests/Pods-JJWhiteDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5F28F4AF5B5E4FB0B3E48A45 /* libPods-JJWhiteDemoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JJWhiteDemoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		822803F532748D6180683BF0 /* Pods-JJWhiteDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoUITests/Pods-JJWhiteDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
 		918443AE096E7072250B40D9 /* Pods-JJWhiteDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoTests/Pods-JJWhiteDemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		924E37B431D0FB17D35ABCF2 /* Pods-JJWhiteDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoUITests/Pods-JJWhiteDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		AF4863C0D68D450AC5E8C7AE /* Pods-JJWhiteDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemo/Pods-JJWhiteDemo.release.xcconfig"; sourceTree = "<group>"; };
 		C3434D77224CA5BC0075C385 /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Toast.h"; sourceTree = "<group>"; };
 		C3434D78224CA5BC0075C385 /* UIView+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Toast.m"; sourceTree = "<group>"; };
 		C346B1D32251A07F0018C4C3 /* JJWhiteDemoBroadcast.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = JJWhiteDemoBroadcast.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -248,6 +251,7 @@
 		C3DCB8D5223757BE00DF4B3C /* VideoSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoSession.h; sourceTree = "<group>"; };
 		C3DCB8D6223757BE00DF4B3C /* VideoViewLayouter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoViewLayouter.h; sourceTree = "<group>"; };
 		C3DCB8D7223757BE00DF4B3C /* VideoSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoSession.m; sourceTree = "<group>"; };
+		C59C4564332C9AEAE9C826D8 /* Pods-JJWhiteDemoBroadcast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JJWhiteDemoBroadcast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JJWhiteDemoBroadcast/Pods-JJWhiteDemoBroadcast.debug.xcconfig"; sourceTree = "<group>"; };
 		F42EB010A9C32ED40ED5CBD2 /* libPods-JJWhiteDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JJWhiteDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -256,8 +260,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C346B2002251A1D10018C4C3 /* libPods-JJWhiteDemo.a in Frameworks */,
 				C346B1D52251A07F0018C4C3 /* ReplayKit.framework in Frameworks */,
+				1FBE2B4EAD42A8D009A07C7C /* libPods-JJWhiteDemoBroadcast.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +284,7 @@
 				C348000622421AA400CEFA26 /* SystemConfiguration.framework in Frameworks */,
 				C36FA7A2223F301200911170 /* libc++.tbd in Frameworks */,
 				8C0A4F5D6EBF7A26E36B9057 /* libPods-JJWhiteDemo.a in Frameworks */,
+				6B1F3AFDE5911F8FE6A9ADCF /* libPods-JJWhiteDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,12 +320,14 @@
 		2FC267FD7D3896F68735B691 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				1CEA9DDA25B3D9BA1312E470 /* Pods-JJWhiteDemo.debug.xcconfig */,
-				3739C2E9D3D2DBD13DEF53B4 /* Pods-JJWhiteDemo.release.xcconfig */,
 				481B2E6E520F831A3E51C7A6 /* Pods-JJWhiteDemoTests.debug.xcconfig */,
 				918443AE096E7072250B40D9 /* Pods-JJWhiteDemoTests.release.xcconfig */,
 				924E37B431D0FB17D35ABCF2 /* Pods-JJWhiteDemoUITests.debug.xcconfig */,
 				822803F532748D6180683BF0 /* Pods-JJWhiteDemoUITests.release.xcconfig */,
+				36A1F4CBFAD2AF57B57B16D6 /* Pods-JJWhiteDemo.debug.xcconfig */,
+				AF4863C0D68D450AC5E8C7AE /* Pods-JJWhiteDemo.release.xcconfig */,
+				C59C4564332C9AEAE9C826D8 /* Pods-JJWhiteDemoBroadcast.debug.xcconfig */,
+				273D911959B21B654ACD9E12 /* Pods-JJWhiteDemoBroadcast.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -338,6 +345,7 @@
 				093D3B89F404E8B2FE5D1B83 /* libPods-JJWhiteDemoUITests.a */,
 				C346B1D42251A07F0018C4C3 /* ReplayKit.framework */,
 				C346B1E12251A07F0018C4C3 /* UIKit.framework */,
+				43B035C07A773E3F6BB4E125 /* libPods-JJWhiteDemoBroadcast.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -649,6 +657,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C346B1F32251A07F0018C4C3 /* Build configuration list for PBXNativeTarget "JJWhiteDemoBroadcast" */;
 			buildPhases = (
+				E6DF2FDDFF8313CE701580AA /* [CP] Check Pods Manifest.lock */,
 				C346B1CF2251A07F0018C4C3 /* Sources */,
 				C346B1D02251A07F0018C4C3 /* Frameworks */,
 				C346B1D12251A07F0018C4C3 /* Resources */,
@@ -948,6 +957,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E6DF2FDDFF8313CE701580AA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-JJWhiteDemoBroadcast-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1056,7 +1087,7 @@
 /* Begin XCBuildConfiguration section */
 		C346B1EE2251A07F0018C4C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1CEA9DDA25B3D9BA1312E470 /* Pods-JJWhiteDemo.debug.xcconfig */;
+			baseConfigurationReference = C59C4564332C9AEAE9C826D8 /* Pods-JJWhiteDemoBroadcast.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = JJWhiteDemoBroadcast/JJWhiteDemoBroadcast.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1082,7 +1113,7 @@
 		};
 		C346B1EF2251A07F0018C4C3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3739C2E9D3D2DBD13DEF53B4 /* Pods-JJWhiteDemo.release.xcconfig */;
+			baseConfigurationReference = 273D911959B21B654ACD9E12 /* Pods-JJWhiteDemoBroadcast.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = JJWhiteDemoBroadcast/JJWhiteDemoBroadcast.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1108,7 +1139,6 @@
 		};
 		C346B1F02251A07F0018C4C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1CEA9DDA25B3D9BA1312E470 /* Pods-JJWhiteDemo.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = JJWhiteDemoBroadcastSetupUI/JJWhiteDemoBroadcastSetupUI.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1130,7 +1160,6 @@
 		};
 		C346B1F12251A07F0018C4C3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3739C2E9D3D2DBD13DEF53B4 /* Pods-JJWhiteDemo.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = JJWhiteDemoBroadcastSetupUI/JJWhiteDemoBroadcastSetupUI.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1264,7 +1293,7 @@
 		};
 		C3B8FEA8223217A40050312F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1CEA9DDA25B3D9BA1312E470 /* Pods-JJWhiteDemo.debug.xcconfig */;
+			baseConfigurationReference = 36A1F4CBFAD2AF57B57B16D6 /* Pods-JJWhiteDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1294,7 +1323,7 @@
 		};
 		C3B8FEA9223217A40050312F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3739C2E9D3D2DBD13DEF53B4 /* Pods-JJWhiteDemo.release.xcconfig */;
+			baseConfigurationReference = AF4863C0D68D450AC5E8C7AE /* Pods-JJWhiteDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;

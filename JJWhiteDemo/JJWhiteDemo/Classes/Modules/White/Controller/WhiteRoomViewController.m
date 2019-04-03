@@ -31,6 +31,7 @@
 static NSInteger btnH = 44;
 
 @interface WhiteRoomViewController ()<WhiteRoomCallbackDelegate,WhiteCommonCallbackDelegate, UIPopoverPresentationControllerDelegate,AgoraRtcEngineDelegate,AgoraRtmDelegate,RPBroadcastActivityViewControllerDelegate>{
+    NSDictionary *_userInfo;//存用户个人信息
 }
 @property (nonatomic, strong) WhiteSDK *sdk;
 @property (nonatomic, assign, getter=isReconnecting) BOOL reconnecting;
@@ -54,11 +55,12 @@ static NSInteger btnH = 44;
 @property (nonatomic, strong) UIButton *peerButton;//右上角人员按钮
 
 @property (strong, nonatomic) AgoraRtcEngineKit *rtcEngine;
-@property (nonatomic, assign) AgoraClientRole isTeacher;//是否是老师，用于辨别唯一
+
 @property (strong, nonatomic) NSMutableArray<VideoSession *> *videoSessions;
 @property (strong, nonatomic) VideoSession *fullSession;
 
 //判断项
+@property (nonatomic, assign) AgoraClientRole isTeacher;//是否是老师，用于辨别唯一
 @property (assign, nonatomic) BOOL isBroadcaster;//是否主播模式
 @property (assign, nonatomic) BOOL isAudio;//语音是否开启
 @property (assign, nonatomic) BOOL isVideo;//视频是否开启
@@ -89,14 +91,6 @@ static NSInteger streamID = 0;
     [super viewDidLoad];
     self.view.backgroundColor = BG_COLOR;
     self.isTeacher = self.clientRole;
-    [self whiteSDK];
-    [self prepareView];
-    self.videoSessions = [[NSMutableArray alloc] init];
-    [self loadAgoraKit];
-    //RTM 相关
-    [AgoraRtm updateDelegate:self];
-    [self addNotificationObserver];
-    
     [self loadChannelAllUser];
     // Do any additional setup after loading the view.
 }
@@ -375,15 +369,6 @@ static NSInteger streamID = 0;
 }
 
 - (void)loadChannelAllUser {
-    //获取个人信息
-    [HandlerBusiness JJGetServiceWithApicode:ApiCodeGetUserById Parameters:@{@"userId": [UserDefaultsUtils valueWithKey:@"uid"]} Success:^(id data, id msg) {
-        DBG(@"ApiCodeGetUserById-----%@", data);
-    } Failed:^(NSString *error, NSString *errorDescription) {
-        DBG(@"ApiCodeGetUserById-----api fail %@",error);
-    } Complete:^{
-        
-    }];
-    
     //获取频道User总数
     [HandlerBusiness JJGetServiceWithApicode:ApiCodeGetChannelAllUser Parameters:@{@"cname":self.roomName} Success:^(id data, id msg) {
         DBG(@"ApiCodeGetChannelAllUser-----%@", data);
@@ -401,6 +386,53 @@ static NSInteger streamID = 0;
         DBG(@"ApiCodeGetChannelAllUser-----api fail %@",error);
     } Complete:^{
     }];
+    
+    if (_isTeacher == AgoraClientRoleAudience) {
+        //获取个人信息
+        [HandlerBusiness JJGetServiceWithApicode:ApiCodeGetUserById Parameters:@{@"userId": [UserDefaultsUtils valueWithKey:@"uid"]} Success:^(id data, id msg) {
+            self->_userInfo = data;
+            //获取到个人信息之后在执行房间内的操作
+            [self whiteSDK];
+            [self prepareView];
+            self.videoSessions = [[NSMutableArray alloc] init];
+            [self loadAgoraKit];
+            //RTM 相关
+            [AgoraRtm updateDelegate:self];
+            [self addNotificationObserver];
+            DBG(@"ApiCodeGetUserById-----%@", data);
+        } Failed:^(NSString *error, NSString *errorDescription) {
+            DBG(@"ApiCodeGetUserById-----api fail %@",error);
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:nil message:@"接口调用失败" preferredStyle:UIAlertControllerStyleAlert];
+            [alertVC setDismissInterval:kTimeSpan complete:^{
+                [self.navigationController popViewControllerAnimated:YES];
+            }];
+            [self presentViewController:alertVC animated:YES completion:nil];
+        } Complete:^{
+            
+        }];
+    }else {
+        [HandlerBusiness JJGetServiceWithApicode:ApiCodeGetTeacherById Parameters:@{@"teacherId": [UserDefaultsUtils valueWithKey:@"uid"]} Success:^(id data, id msg) {
+            DBG(@"ApiCodeGetTeacherById-----%@", data);
+            self->_userInfo = data;
+            //获取到个人信息之后在执行房间内的操作
+            [self whiteSDK];
+            [self prepareView];
+            self.videoSessions = [[NSMutableArray alloc] init];
+            [self loadAgoraKit];
+            //RTM 相关
+            [AgoraRtm updateDelegate:self];
+            [self addNotificationObserver];
+        } Failed:^(NSString *error, NSString *errorDescription) {
+            UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:nil message:@"接口调用失败" preferredStyle:UIAlertControllerStyleAlert];
+            [alertVC setDismissInterval:kTimeSpan complete:^{
+                [self.navigationController popViewControllerAnimated:YES];
+            }];
+            [self presentViewController:alertVC animated:YES completion:nil];
+        } Complete:^{
+            
+        }];
+    }
+    
 }
 
 - (BOOL)isBroadcaster {
@@ -563,6 +595,8 @@ static NSInteger streamID = 0;
             NSString *uuid = response[@"msg"][@"room"][@"uuid"];
             self.roomUuid = uuid;
             if (self.roomUuid && roomToken) {
+                
+                
                 [self joinRoomWithToken:roomToken];
             } else {
                 NSLog(NSLocalizedString(@"连接房间失败，room uuid:%@ roomToken:%@", nil), self.roomUuid, roomToken);
@@ -599,7 +633,10 @@ static NSInteger streamID = 0;
     }
 //    self.title = NSLocalizedString(@"加入房间中...", nil);
     self.progressHUD.label.text = @"加入房间中...";
+    
     [self joinRoomWithToken:self.roomToken];
+    
+    
     
 //    [WhiteUtils getRoomTokenWithUuid:self.roomUuid Result:^(BOOL success, id response, NSError *error) {
 //        if (success) {
@@ -627,13 +664,20 @@ static NSInteger streamID = 0;
     //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
     config.enableInterrupterAPI = YES;
     config.debug = YES;
+    //sdk 2.0.2 新增
+    config.userCursor = YES;
     
     
     [self prepareWhiteView];
     [self updateButtonsVisiablity];
     
+    WhiteMemberInformation *memberInfo = [[WhiteMemberInformation alloc] initWithUserId:[UserDefaultsUtils valueWithKey:@"uid"] name:_userInfo[@"weixinName"] avatar:_userInfo[@"avatar"]];
+    
     self.sdk = [[WhiteSDK alloc] initWithWhiteBoardView:self.boardView config:config commonCallbackDelegate:self.commonDelegate];
-    [self.sdk joinRoomWithRoomUuid:self.roomUuid roomToken:roomToken callbacks:self.roomCallbackDelegate completionHandler:^(BOOL success, WhiteRoom * _Nonnull room, NSError * _Nonnull error) {
+    
+    WhiteRoomConfig *roomConfig = [[WhiteRoomConfig alloc] initWithUuid:self.roomUuid roomToken:roomToken memberInfo:memberInfo];
+    
+    [self.sdk joinRoomWithConfig:roomConfig callbacks:self.roomCallbackDelegate completionHandler:^(BOOL success, WhiteRoom * _Nullable room, NSError * _Nullable error) {
         if (success) {
             
             [self.progressHUD removeFromSuperview];

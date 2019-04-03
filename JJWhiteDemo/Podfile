@@ -25,4 +25,9 @@ target 'JJWhiteDemo' do
     # Pods for testing
   end
 
+  target 'JJWhiteDemoBroadcast' do
+    inherit! :search_paths
+    pod 'AgoraRtcEngine_iOS'
+  end
+
 end

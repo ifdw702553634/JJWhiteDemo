@@ -90,7 +90,7 @@
         [self.navigationController pushViewController:vc animated:YES];
 
     } Failed:^(NSString *error, NSString *errorDescription) {
-        NSLog(@"Api Failed");
+        DBG(@"ApiCodeGetClassRoom -----Api Failed %@",errorDescription);
     } Complete:^{
         [MBProgressHUD hideHUDForView: self.view animated:YES];
     }];
