@@ -10,6 +10,7 @@ extern NSString *const ApiCodeGetChannelUser;
 extern NSString *const ApiCodeGetChannelAllUser;
 extern NSString *const ApiCodeGetUserById;
 extern NSString *const ApiCodeGetTeacherById;
+extern NSString *const ApiCodeUploadImageGetWH;
 
 
 +(NSDictionary *)mapModel;

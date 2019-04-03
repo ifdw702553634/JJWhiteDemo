@@ -19,4 +19,5 @@
 #import "MJRefresh.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "UIView+Toast.h"
+#import "BusinessCommon.h"
 #endif /* JJ_Prefix_pch */

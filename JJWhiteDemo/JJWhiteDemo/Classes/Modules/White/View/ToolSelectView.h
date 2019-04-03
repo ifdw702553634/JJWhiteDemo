@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ToolSelectView : UIView
 
 @property (nonatomic, strong) WhiteRoom *room;
+@property (nonatomic, assign) CGSize superViewSize;
 
 @property (nonatomic, copy) ToolSelectBlock toolSelectBlock;
 @property (nonatomic, copy) CancelBlock cancelBlock;

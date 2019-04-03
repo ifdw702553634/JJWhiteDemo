@@ -164,6 +164,41 @@ static NSString *kToolSelectTableViewCell = @"ToolSelectTableViewCell";
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     UIImage* image = [info objectForKey: @"UIImagePickerControllerOriginalImage"];
     [picker dismissViewControllerAnimated:YES completion:nil];
+
+    CGSize size = CGSizeMake(300, 300);
+    // 创建一个bitmap的context
+    // 并把它设置成为当前正在使用的context
+    UIGraphicsBeginImageContext(size);
+    // 绘制改变大小的图片
+    [image drawInRect:CGRectMake(0,0, size.width, size.height)];
+    // 从当前context中创建一个改变大小后的图片
+    UIImage* scaledImage =UIGraphicsGetImageFromCurrentImageContext();
+    NSData *data = UIImageJPEGRepresentation(scaledImage, 1.f);
+    // 使当前的context出堆栈
+    UIGraphicsEndImageContext();
+    
+    [HandlerBusiness JJPostUploadImageWithApicode:ApiCodeUploadImageGetWH Data:data Parameters:@{@"dir":@"whiteImg"} Success:^(id data, id msg) {
+        DBG(@"%@", data);
+        WhitePanEvent *event = [[WhitePanEvent alloc] init];
+        event.x = self.superViewSize.width/2.f;
+        event.y = self.superViewSize.height/2.f;
+        [self.room convertToPointInWorld:event result:^(WhitePanEvent * _Nonnull convertPoint) {
+            WhiteImageInformation *info = [[WhiteImageInformation alloc] init];
+            info.width = [data[@"width"] floatValue];
+            info.height = [data[@"height"] floatValue];
+            info.centerX = convertPoint.x;
+            info.centerY = convertPoint.y;
+            info.uuid = data[@"url"];
+            NSString *imageUrl = [NSString stringWithFormat:@"%@%@",kBaseImgUrl,data[@"url"]];
+            //这一行与注释的两行代码等效
+            [self.room insertImage:info src:imageUrl];
+        }];
+    } Failed:^(NSString *error, NSString *errorDescription) {
+        DBG(@"ApiCodeUploadImageGetWH-----api fail %@",errorDescription);
+    } Complete:^{
+    }];
+    
+    
 }
 
 -(UIViewController*)viewController

@@ -11,6 +11,7 @@ NSString *const ApiCodeGetChannelUser  = @"/getChannelUser";
 NSString *const ApiCodeGetChannelAllUser = @"/getChannelAllUser";
 NSString *const ApiCodeGetUserById = @"/getUserById";
 NSString *const ApiCodeGetTeacherById = @"/getTeacherById";
+NSString *const ApiCodeUploadImageGetWH = @"/comm/UploadImageGetWH";
 
 /**
  *  接口apicode和Model映射关系

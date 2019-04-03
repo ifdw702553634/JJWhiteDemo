@@ -31,4 +31,7 @@ typedef void (^ApiFailedBlock)(NSString * error ,NSString * errorDescription);
 //get方法
 + (void)GetServiceWithBaseUrl:(NSString *)baseUrl Apicode:(NSString*)apicode Parameters:(NSDictionary*)parameters Success:(ApiSuccessBlock)success Failed:(ApiFailedBlock)failed Complete:(ApiCompleteBlock)complete;
 
+//上传图片
++ (void)PostServiceUploadDataWithBaseUrl:(NSString *)baseUrl Data:(NSData *)data Apicode:(NSString*)apicode Parameters:(NSDictionary*)parameters Success:(ApiSuccessBlock)success Failed:(ApiFailedBlock)failed Complete:(ApiCompleteBlock)complete;
+
 @end

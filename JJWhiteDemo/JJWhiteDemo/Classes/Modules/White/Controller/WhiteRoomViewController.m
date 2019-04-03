@@ -199,6 +199,7 @@ static NSInteger streamID = 0;
     self.toolSelectView.cancelBlock = ^{
         [weakSelf cancel];
     };
+    
     [self.view addSubview:_toolSelectView];
     [_toolSelectView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.bottom.equalTo(self.view).offset(0);
@@ -304,9 +305,12 @@ static NSInteger streamID = 0;
         make.width.height.offset(200);
     }];
     [self.view bringSubviewToFront:_progressHUD];
+    
+    [self.view layoutIfNeeded];
+    //layoutIfNeeded 之后再给size赋值
+    self.toolSelectView.superViewSize = self.boardView.bounds.size;
+    
 }
-
-
 
 - (void)optionWithAudienceId:(NSInteger)uid {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -662,7 +666,7 @@ static NSInteger streamID = 0;
     WhiteSdkConfiguration *config = [WhiteSdkConfiguration defaultConfig];
     
     //如果不需要拦截图片API，则不需要开启，页面内容较为复杂时，可能会有性能问题
-    config.enableInterrupterAPI = YES;
+    config.enableInterrupterAPI = NO;
     config.debug = YES;
     //sdk 2.0.2 新增
     config.userCursor = YES;

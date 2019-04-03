@@ -15,4 +15,10 @@
  */
 +(void)JJGetServiceWithApicode:(NSString*)apicode Parameters:(NSDictionary*)parameters Success:(ApiSuccessBlock)success Failed:(ApiFailedBlock)failed Complete:(ApiCompleteBlock)complete;
 
+
+/**
+ *  Post 上传文件接口
+ */
++(void)JJPostUploadImageWithApicode:(NSString *)apicode Data:(NSData *)data Parameters:(NSDictionary*)parameters Success:(ApiSuccessBlock)success Failed:(ApiFailedBlock)failed Complete:(ApiCompleteBlock)complete;
+
 @end

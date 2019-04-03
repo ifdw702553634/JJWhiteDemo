@@ -41,6 +41,7 @@
 		C3689BC62237B5710069DC5B /* ColorTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3689BC42237B5710069DC5B /* ColorTableViewCell.m */; };
 		C3689BC72237B5710069DC5B /* ColorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3689BC52237B5710069DC5B /* ColorTableViewCell.xib */; };
 		C36FA7A2223F301200911170 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C36FA7A1223F301200911170 /* libc++.tbd */; };
+		C38552C122549B7F0007CE17 /* BusinessCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = C38552C022549B7F0007CE17 /* BusinessCommon.m */; };
 		C3A7ED752245E01400378CDA /* RightAudienceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3A7ED732245E01400378CDA /* RightAudienceTableViewCell.m */; };
 		C3A7ED762245E01400378CDA /* RightAudienceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3A7ED742245E01400378CDA /* RightAudienceTableViewCell.xib */; };
 		C3B83E3B223B3A28003E9443 /* LiveTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C3B83E3A223B3A28003E9443 /* LiveTableView.m */; };
@@ -186,6 +187,8 @@
 		C3689BC42237B5710069DC5B /* ColorTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColorTableViewCell.m; sourceTree = "<group>"; };
 		C3689BC52237B5710069DC5B /* ColorTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColorTableViewCell.xib; sourceTree = "<group>"; };
 		C36FA7A1223F301200911170 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		C38552BF22549B7E0007CE17 /* BusinessCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusinessCommon.h; sourceTree = "<group>"; };
+		C38552C022549B7F0007CE17 /* BusinessCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusinessCommon.m; sourceTree = "<group>"; };
 		C3A7ED722245E01400378CDA /* RightAudienceTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RightAudienceTableViewCell.h; sourceTree = "<group>"; };
 		C3A7ED732245E01400378CDA /* RightAudienceTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RightAudienceTableViewCell.m; sourceTree = "<group>"; };
 		C3A7ED742245E01400378CDA /* RightAudienceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightAudienceTableViewCell.xib; sourceTree = "<group>"; };
@@ -529,6 +532,8 @@
 				C3D71D1322436A9500CE2E4D /* Constants.h */,
 				C3B8FE7E223217A20050312F /* AppDelegate.h */,
 				C3B8FE7F223217A20050312F /* AppDelegate.m */,
+				C38552BF22549B7E0007CE17 /* BusinessCommon.h */,
+				C38552C022549B7F0007CE17 /* BusinessCommon.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -1033,6 +1038,7 @@
 				C34800142242244400CEFA26 /* JJApiClient.m in Sources */,
 				C3DCB8D9223757BE00DF4B3C /* VideoViewLayouter.m in Sources */,
 				C3D71D0E22436A1800CE2E4D /* UserDefaultsUtils.m in Sources */,
+				C38552C122549B7F0007CE17 /* BusinessCommon.m in Sources */,
 				C3D71D002243687B00CE2E4D /* UIAlertController+AutoHide.m in Sources */,
 				C3B8FEB72232188B0050312F /* CommandListController.m in Sources */,
 				C3DCB8D8223757BE00DF4B3C /* KeyCenter.m in Sources */,
