@@ -164,18 +164,7 @@ static NSString *kToolSelectTableViewCell = @"ToolSelectTableViewCell";
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     UIImage* image = [info objectForKey: @"UIImagePickerControllerOriginalImage"];
     [picker dismissViewControllerAnimated:YES completion:nil];
-
-    CGSize size = CGSizeMake(300, 300);
-    // 创建一个bitmap的context
-    // 并把它设置成为当前正在使用的context
-    UIGraphicsBeginImageContext(size);
-    // 绘制改变大小的图片
-    [image drawInRect:CGRectMake(0,0, size.width, size.height)];
-    // 从当前context中创建一个改变大小后的图片
-    UIImage* scaledImage =UIGraphicsGetImageFromCurrentImageContext();
-    NSData *data = UIImageJPEGRepresentation(scaledImage, 1.f);
-    // 使当前的context出堆栈
-    UIGraphicsEndImageContext();
+    NSData *data = UIImageJPEGRepresentation(image, 0.3f);
     
     [HandlerBusiness JJPostUploadImageWithApicode:ApiCodeUploadImageGetWH Data:data Parameters:@{@"dir":@"whiteImg"} Success:^(id data, id msg) {
         DBG(@"%@", data);
@@ -183,9 +172,19 @@ static NSString *kToolSelectTableViewCell = @"ToolSelectTableViewCell";
         event.x = self.superViewSize.width/2.f;
         event.y = self.superViewSize.height/2.f;
         [self.room convertToPointInWorld:event result:^(WhitePanEvent * _Nonnull convertPoint) {
+            //原图比例
+            CGFloat scaleOriginWH = [data[@"width"] floatValue]/[data[@"height"] floatValue];
+            //白板比例
+            CGFloat scaleSuperWH = self.superViewSize.width/self.superViewSize.height;
+            //设置图片中点所在的位置
             WhiteImageInformation *info = [[WhiteImageInformation alloc] init];
-            info.width = [data[@"width"] floatValue];
-            info.height = [data[@"height"] floatValue];
+            if (scaleOriginWH > scaleSuperWH) {
+                info.width = self.superViewSize.width-100;
+                info.height = (self.superViewSize.width-100)/scaleOriginWH;
+            }else {
+                info.width = (self.superViewSize.height-100)*scaleOriginWH;
+                info.height = self.superViewSize.height-100;
+            }
             info.centerX = convertPoint.x;
             info.centerY = convertPoint.y;
             info.uuid = data[@"url"];
@@ -197,8 +196,6 @@ static NSString *kToolSelectTableViewCell = @"ToolSelectTableViewCell";
         DBG(@"ApiCodeUploadImageGetWH-----api fail %@",errorDescription);
     } Complete:^{
     }];
-    
-    
 }
 
 -(UIViewController*)viewController
