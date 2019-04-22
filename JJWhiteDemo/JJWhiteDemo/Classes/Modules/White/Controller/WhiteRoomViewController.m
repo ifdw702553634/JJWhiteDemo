@@ -68,8 +68,6 @@ static NSInteger btnH = 44;
 @property (assign, nonatomic) BOOL isChat;//是否打开聊天框
 @property (assign, nonatomic) BOOL isHand;//是否举手，举手状态下不可继续举手
 
-//信令
-@property (nonatomic, strong) UITextField *txtField;
 @property (nonatomic, strong) NSMutableArray *list;
 @property (nonatomic, strong) RightView *rightView;
 @property (nonatomic, strong) UIView *maskView;
@@ -270,7 +268,6 @@ static NSInteger streamID = 0;
         [self.boardView addSubview:_handButton];
         [self.handButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.view).offset(-2);
-//            make.left.equalTo(self.txtField.mas_right).offset(2);
             make.right.equalTo(self.boardView).offset(-2);
             make.width.height.offset(btnH);
         }];
@@ -599,8 +596,6 @@ static NSInteger streamID = 0;
             NSString *uuid = response[@"msg"][@"room"][@"uuid"];
             self.roomUuid = uuid;
             if (self.roomUuid && roomToken) {
-                
-                
                 [self joinRoomWithToken:roomToken];
             } else {
                 NSLog(NSLocalizedString(@"连接房间失败，room uuid:%@ roomToken:%@", nil), self.roomUuid, roomToken);
@@ -698,13 +693,15 @@ static NSInteger streamID = 0;
             }
         } else if (self.roomBlock) {
             self.roomBlock(nil, error);
+            [self.progressHUD removeFromSuperview];
         } else {
             self.title = NSLocalizedString(@"加入失败", nil);
             UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"加入房间失败", nil) message:[NSString stringWithFormat:@"错误信息:%@", [error localizedDescription]] preferredStyle:UIAlertControllerStyleAlert];
             alertVC.popoverPresentationController.sourceView = self.view;
             alertVC.popoverPresentationController.sourceRect = self.view.bounds;
             UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
+                [self leaveChannel];
+                
             }];
             [alertVC addAction:action];
             [self presentViewController:alertVC animated:YES completion:nil];
@@ -832,6 +829,7 @@ static NSInteger streamID = 0;
     NSLog(@"throwError: %@", error.userInfo);
 }
 
+//拦截图片，替换成返回值的方法（未使用）
 - (NSString *)urlInterrupter:(NSString *)url
 {
     return @"https://white-pan-cn.oss-cn-hangzhou.aliyuncs.com/124/image/image.png";
@@ -1216,9 +1214,6 @@ static NSInteger streamID = 0;
 }
 
 - (void)addNotificationObserver {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardFrameWillChange:)
-                                                 name:UIKeyboardWillChangeFrameNotification object:nil];
     //注册按钮点击通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoButtonClick:) name:@"videoButtonClick" object:nil];
 }
@@ -1232,38 +1227,6 @@ static NSInteger streamID = 0;
     model.type = [[noti object][@"messageType"] integerValue];
     model.msg = [noti object][@"msg"];
     [self sendMessageWithPeer:[NSString stringWithFormat:@"%@",[noti object][@"uid"]] model:model];
-}
-
-- (void)keyboardFrameWillChange:(NSNotification *)notification {
-    NSDictionary *userInfo = notification.userInfo;
-    NSValue *endKeyboardFrameValue = (NSValue *)userInfo[UIKeyboardFrameEndUserInfoKey];
-    NSNumber *durationValue = (NSNumber *)userInfo[UIKeyboardAnimationDurationUserInfoKey];
-    
-    CGRect endKeyboardFrame = endKeyboardFrameValue.CGRectValue;
-    float duration = durationValue.floatValue;
-    
-    BOOL isShowing = (endKeyboardFrame.size.height + endKeyboardFrame.origin.y) > [UIScreen mainScreen].bounds.size.height ? NO : YES;
-    
-    __weak WhiteRoomViewController *weakSelf = self;
-    
-    [UIView animateWithDuration:duration animations:^{
-        if (isShowing) {
-            float offsetY = (weakSelf.txtField.frame.origin.y + weakSelf.txtField.frame.size.height) - endKeyboardFrame.origin.y;
-            
-            if (offsetY <= 0) {
-                return;
-            }
-            [weakSelf.txtField mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.bottom.equalTo(weakSelf.boardView).offset(-offsetY);
-            }];
-            
-        } else {
-            [weakSelf.txtField mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.bottom.equalTo(weakSelf.boardView).offset(0);
-            }];
-        }
-        [weakSelf.view layoutIfNeeded];
-    }];
 }
 
 - (void)dealloc {

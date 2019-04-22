@@ -93,6 +93,7 @@
         if (![uid isEqualToString:lastAccount]) {
             [[NSUserDefaults standardUserDefaults] setValue:uid forKey:@"uid"];
         }
+        
         [self loginWithUid:uid];
     }
 }
